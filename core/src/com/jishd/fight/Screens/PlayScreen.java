@@ -47,10 +47,10 @@ public class PlayScreen implements Screen {
     //All projectiles on this map
     private ArrayList<Projectile> projectiles;
 
-    //Deleted bodies wanted!
-    private ArrayList<Projectile> deadProjectiles;
+
 
     public PlayScreen(FightGame game) {
+        //This may need to go to game instead, as sprites will also be used in the menu screens etc.
         atlas = new TextureAtlas("FightGame.pack");
         this.game = game;
         //Camera fitting
@@ -80,7 +80,6 @@ public class PlayScreen implements Screen {
             models.add(player.spawnCharacterModel(this));
         }
         projectiles = new ArrayList<Projectile>();
-        deadProjectiles = new ArrayList<Projectile>();
 
         hud = new Hud(game.batch, models);
     }
@@ -204,15 +203,11 @@ public class PlayScreen implements Screen {
         world.dispose();
         b2dr.dispose();
         hud.dispose();
-
     }
 
     public ArrayList<Projectile> getProjectiles() {
         return projectiles;
     }
 
-    public ArrayList<Projectile> getDeadProjectiles() {
-        return deadProjectiles;
-    }
 
 }

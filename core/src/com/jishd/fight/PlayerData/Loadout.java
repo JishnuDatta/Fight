@@ -38,6 +38,7 @@ public class Loadout {
 
     public void equip(Item item, FightGame.SLOT slot) {
         if(mercenary.getPlayer().getInventory().getAllItems().contains(item)){
+            //Turn into switch statement? useful for doubles etc
         if (slot == FightGame.SLOT.weapon1Slot) {
             weapon1 = item;
         } else if (slot == FightGame.SLOT.weapon2Slot) {
@@ -305,4 +306,6 @@ public class Loadout {
     public void setShadowResistance(int shadowResistance) {
         this.shadowResistance = shadowResistance;
     }
+
+
 }

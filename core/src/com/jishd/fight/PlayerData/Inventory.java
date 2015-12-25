@@ -21,6 +21,15 @@ public class Inventory {
 
     public Inventory(Player player) {
         this.player = player;
+        allItems = new  ArrayList<Item>();
+        weaponItems = new  ArrayList<Item>();
+        miscItems = new  ArrayList<Item>();
+        runeItems = new  ArrayList<Item>();
+        ammoItems = new  ArrayList<Item>();
+        headItems = new  ArrayList<Item>();
+        chestItems = new  ArrayList<Item>();
+        legItems = new  ArrayList<Item>();
+        footItems = new  ArrayList<Item>();
     }
 
     public void addItem(Item item) {

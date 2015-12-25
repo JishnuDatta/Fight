@@ -66,7 +66,7 @@ public class MercenaryModel extends Sprite {
         //  charRun = new Animation(0.1f, frames);
         //frames.clear();
         //Setting up Jump
-    //Copy from run
+        //Copy from run
         //Standing
 
         charStand = new TextureRegion(playScreen.getAtlas().findRegion("Archer"), 0, 0, 48, 64);
@@ -165,10 +165,14 @@ public class MercenaryModel extends Sprite {
         }
     }
 
-    public void shoot() {
-        //Projectile projectile = new Projectile(0, 0, 3, playScreen, mercenaryBody, mercenary);
-        //projectile.shoot();
-       // playScreen.getProjectiles().add(projectile);
+    public void handleInput(FightGame.Controls input) {
+        switch(input) {
+            case WEAPON1:
+
+                //Projectile projectile = new Projectile(0, 0, 3, playScreen, mercenaryBody, mercenary);
+                //projectile.shoot();
+                // playScreen.getProjectiles().add(projectile);
+        }
     }
 
     public void calculateDamage(Mercenary mercenary, Projectile p, String s) {
@@ -202,8 +206,8 @@ public class MercenaryModel extends Sprite {
     }
 
     public int getCurrentMana() {
-        return currentMana;
-    }
+            return currentMana;
+        }
 
     public void destroy() {
         killModel = true;

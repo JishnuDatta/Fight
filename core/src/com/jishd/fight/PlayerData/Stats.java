@@ -97,6 +97,8 @@ public class Stats {
     public void addAttributePoint() {
     }
 
+
+
     public int getRangedDamage() {
         return rangedDamage;
     }
@@ -296,6 +298,7 @@ public class Stats {
     public void setShadowResistance(int shadowResistance) {
         this.shadowResistance = shadowResistance;
     }
+
 }
 
 

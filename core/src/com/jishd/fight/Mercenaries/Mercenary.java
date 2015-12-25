@@ -1,9 +1,11 @@
 package com.jishd.fight.Mercenaries;
 
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.jishd.fight.FightGame;
 import com.jishd.fight.PlayerData.Loadout;
 import com.jishd.fight.PlayerData.Player;
 import com.jishd.fight.PlayerData.Stats;
+import com.jishd.fight.Screens.PlayScreen;
 
 public abstract class Mercenary {
     public FightGame.Mercenaries type;
@@ -30,6 +32,11 @@ public abstract class Mercenary {
 
     public Stats getStats(){
         return stats;
+    }
+
+    //Just a placeholder for when I create real sprites, convert this to abstract afterwards
+    public TextureRegion getTextureRegion(){
+        return new TextureRegion(((PlayScreen)player.getFightGame().getScreen()).getAtlas().findRegion("Archer"), 0, 0, 48, 64);
     }
 
     public int getRangedDamage() {
@@ -131,6 +138,5 @@ public abstract class Mercenary {
     public int getShadowResistance() {
         return stats.getShadowResistance() + loadout.getShadowResistance();
     }
-
 
 }

@@ -14,12 +14,14 @@ import java.util.ArrayList;
 
 public class Player {
 
+    private FightGame fightGame;
     private String name;
     private Inventory inventory;
     private int[] controls;
     private ArrayList<Mercenary> fighterList;
 
-    public Player(String name) {
+    public Player(FightGame fightGame, String name) {
+        this.fightGame = fightGame;
         this.name = name;
         inventory = new Inventory(this);
         controls = new int[8];
@@ -66,5 +68,9 @@ public class Player {
 
     public ArrayList<Mercenary> getMercenaryList() {
         return fighterList;
+    }
+
+    public FightGame getFightGame() {
+        return fightGame;
     }
 }
