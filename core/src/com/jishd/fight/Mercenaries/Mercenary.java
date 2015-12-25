@@ -9,7 +9,7 @@ import com.jishd.fight.Screens.PlayScreen;
 
 public abstract class Mercenary {
     public FightGame.Mercenaries type;
-    //Should i make this public?
+    //Should i make this public??
     protected Player player;
     protected Stats stats;
     protected Loadout loadout;
