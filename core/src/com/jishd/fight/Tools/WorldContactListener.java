@@ -1,0 +1,68 @@
+package com.jishd.fight.Tools;
+
+import com.badlogic.gdx.physics.box2d.Contact;
+import com.badlogic.gdx.physics.box2d.ContactImpulse;
+import com.badlogic.gdx.physics.box2d.ContactListener;
+import com.badlogic.gdx.physics.box2d.Fixture;
+import com.badlogic.gdx.physics.box2d.Manifold;
+import com.jishd.fight.FightGame;
+import com.jishd.fight.Sprites.Classes.CharacterModel;
+import com.jishd.fight.Sprites.Items.Projectile;
+
+public class WorldContactListener implements ContactListener {
+    @Override
+    public void beginContact(Contact contact) {
+        Fixture fixA = contact.getFixtureA();
+        Fixture fixB = contact.getFixtureB();
+
+        //Adding the bits together to make it faster?
+        int cDef = fixA.getFilterData().categoryBits | fixB.getFilterData().categoryBits;
+
+        //Switch statement controls all collisions
+        switch (cDef) {
+            //For collision between bullet and a head
+            case FightGame.HEAD_BIT | FightGame.PROJECTILE_BIT:
+                if (fixA.getFilterData().categoryBits == FightGame.HEAD_BIT) {
+                    ((CharacterModel) fixA.getUserData()).calculateDamage(((Projectile) fixB.getUserData()).getCharacter(), ((Projectile) fixB.getUserData()), "head");
+                } else {
+                    ((CharacterModel) fixB.getUserData()).calculateDamage(((Projectile) fixA.getUserData()).getCharacter(), ((Projectile) fixA.getUserData()), "head");
+                }
+                break;
+            case FightGame.BODY_BIT | FightGame.PROJECTILE_BIT:
+                if (fixA.getFilterData().categoryBits == FightGame.BODY_BIT) {
+                    ((CharacterModel) fixA.getUserData()).calculateDamage(((Projectile) fixB.getUserData()).getCharacter(), ((Projectile) fixB.getUserData()), "body");
+                } else {
+                    ((CharacterModel) fixB.getUserData()).calculateDamage(((Projectile) fixA.getUserData()).getCharacter(), ((Projectile) fixA.getUserData()), "body");
+                }
+                break;
+            case FightGame.PROJECTILE_BIT | FightGame.TILE_BIT:
+                if (fixA.getFilterData().categoryBits == FightGame.PROJECTILE_BIT) {
+                    ((Projectile) (fixA.getUserData())).destroy(true);
+                } else {
+                    ((Projectile) (fixB.getUserData())).destroy(true);
+                }
+                break;
+            case FightGame.HEAD_BIT | FightGame.TILE_BIT:
+            case FightGame.BODY_BIT | FightGame.TILE_BIT:
+            default:
+                break;
+
+        }
+
+    }
+
+    @Override
+    public void endContact(Contact contact) {
+
+    }
+
+    @Override
+    public void preSolve(Contact contact, Manifold oldManifold) {
+
+    }
+
+    @Override
+    public void postSolve(Contact contact, ContactImpulse impulse) {
+
+    }
+}
