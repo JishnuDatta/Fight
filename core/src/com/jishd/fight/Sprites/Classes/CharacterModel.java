@@ -22,7 +22,6 @@ public class CharacterModel extends Sprite {
     public State previousState;
     public int jumpCounter;
 
-    ;
     private World world;
     private PlayScreen screen;
     private Animation charRun;
@@ -59,8 +58,8 @@ public class CharacterModel extends Sprite {
         charStand = new TextureRegion(screen.getAtlas().findRegion("Archer"), 0, 0, 48, 64);
         setBounds(100, 100, sizeX / FightGame.PPM, sizeY / FightGame.PPM);
         setRegion(charStand);
-        //setColor(0.3f);
         setSize(64 / FightGame.PPM, 64 / FightGame.PPM);
+        //setColor(0.3f);
 
         //Set world and screen
         this.screen = screen;
@@ -181,12 +180,12 @@ public class CharacterModel extends Sprite {
     }
 
     public void calculateDamage(Character character, Projectile p, String s) {
-        if (s == "head") {
+        if (s.equals("head")) {
             System.out.println("headshot!");
             currentHealth -= p.getDamage();
             p.destroy(false);
 
-        } else if (s == "body") {
+        } else if (s.equals("body")) {
             System.out.println("bodyshot!");
             currentHealth -= p.getDamage();
             p.destroy(false);

@@ -16,33 +16,47 @@ import com.jishd.fight.Mercenaries.Mercenary;
 import com.jishd.fight.Screens.PlayScreen;
 import com.jishd.fight.Sprites.Items.Projectile;
 
-//Does texture/ hitboxes for in game
-public class MercenaryModel extends Sprite{
+public class MercenaryModel extends Sprite {
+
+    private Mercenary mercenary;
     private PlayScreen playScreen;
     private World world;
-    private Mercenary mercenary;
-    private MercenaryInGame mercenaryInGame;
 
-    private Body mercenaryBody;
-    //State and animation stuff
+    private int currentHealth, currentMana;
 
+    private boolean charDirRight;
+    private int jumpCounter;
+
+    private boolean killModel, isDead;
+
+    private enum State {STANDING, RUNNING, JUMPING, FALLING}
+    private State currentState;
+    private State previousState;
+    private float stateTimer;
+
+    private TextureRegion charStand;
     private Animation charRun;
     private Animation charJump;
-    private TextureRegion charStand;
+    
+    private Body mercenaryBody;
 
-    private Projectile projectile;
-
-    private boolean isDead;//change over
-
-    public MercenaryModel(PlayScreen playScreen, Mercenary mercenary) {
-
+    public MercenaryModel(PlayScreen playScreen, Mercenary mercenary, int spawnPointX, int spawnPointY){
+        this.mercenary = mercenary;
         this.playScreen = playScreen;
         this.world = playScreen.getWorld();
-        this.mercenary = mercenary;
-        mercenaryInGame = new MercenaryInGame(this);
 
+        currentHealth = mercenary.getHealthMult();
+        currentMana = mercenary.getManaMult();
 
-        //setColor(0.3f);
+        charDirRight = true;
+        jumpCounter = 0;
+
+        killModel = false;
+        isDead = false;
+
+        currentState = State.STANDING;
+        previousState = State.STANDING;
+        stateTimer = 0;
 
         //Setting up Run
         // Array<TextureRegion> frames = new Array<TextureRegion>();
@@ -52,29 +66,27 @@ public class MercenaryModel extends Sprite{
         //  charRun = new Animation(0.1f, frames);
         //frames.clear();
         //Setting up Jump
-
+    //Copy from run
         //Standing
-        //Figure out size stuff
-        charStand = new TextureRegion(playScreen.getAtlas().findRegion(mercenary.toString()), 0, 0, 48, 64);
-       // setBounds(100, 100, sizeX / FightGame.PPM, sizeY / FightGame.PPM);
+
+        charStand = new TextureRegion(playScreen.getAtlas().findRegion("Archer"), 0, 0, 48, 64);
+        setBounds(100, 100, 48 / FightGame.PPM, 64 / FightGame.PPM);
         setRegion(charStand);
+        //setSize(48 / FightGame.PPM, 64 / FightGame.PPM);
+        //setColor(0.3f);
 
-        setSize(64 / FightGame.PPM, 64 / FightGame.PPM);
-
+        //Create the body
         defineChar();
     }
 
     public void defineChar() {
-        BodyDef bdef = new BodyDef();
-
-        //Set this at spawn points later on
-        bdef.position.set(100 / FightGame.PPM, 100 / FightGame.PPM);
-        bdef.type = BodyDef.BodyType.DynamicBody;
-        mercenaryBody = world.createBody(bdef);
-
-        //Standardize this
-        FixtureDef headFixture = new FixtureDef();
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.position.set(100 / FightGame.PPM, 100 / FightGame.PPM);
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        mercenaryBody = world.createBody(bodyDef);
+        
         //Create the head hitbox
+        FixtureDef headFixture = new FixtureDef();
         CircleShape head = new CircleShape();
         head.setRadius(6 / FightGame.PPM);
         head.setPosition(new Vector2(-7 / FightGame.PPM, 21 / FightGame.PPM));
@@ -82,8 +94,8 @@ public class MercenaryModel extends Sprite{
         headFixture.filter.categoryBits = FightGame.HEAD_BIT;
         mercenaryBody.createFixture(headFixture).setUserData(this);
 
-        FixtureDef bodyFixture = new FixtureDef();
         //Create lowerbody hitbox
+        FixtureDef bodyFixture = new FixtureDef();
         PolygonShape torso = new PolygonShape();
         torso.setAsBox(10 / FightGame.PPM, 21 / FightGame.PPM, new Vector2(-5 / FightGame.PPM, -7 / FightGame.PPM), 0);
         bodyFixture.shape = torso;
@@ -93,24 +105,23 @@ public class MercenaryModel extends Sprite{
     }
 
     public void update(float dt) {
-        //If Mercenary now dead, kill the body, etc
-        if (mercenaryInGame.isKillModel() && !isDead) {
+        if (killModel && !isDead) {
             world.destroyBody(mercenaryBody);
             isDead = true;
         }
-        //If Mercenary alive
-        else if(!isDead){
-        mercenaryInGame.update(dt);
+        if (!isDead) {
+            if (currentState == State.STANDING || currentState == State.RUNNING) {
+                jumpCounter = 0;
+            }
             setPosition(mercenaryBody.getPosition().x - getWidth() / 2, mercenaryBody.getPosition().y - getWidth() / 2);
             setRegion(getFrame(dt));
         }
     }
 
     public TextureRegion getFrame(float dt) {
-        FightGame.MercenaryInGameState state = mercenaryInGame.getState();
-
         TextureRegion region;
-        switch (state) {
+        currentState = getState();
+        switch (currentState) {
             case JUMPING:
                 // System.out.println("Jumping");
                 // region = charJump.getKeyFrame(stateTimer);
@@ -129,27 +140,73 @@ public class MercenaryModel extends Sprite{
                 break;
 
         }
-        if ((mercenaryBody.getLinearVelocity().x < 0 || !mercenaryInGame.isCharDirRight()) && !region.isFlipX()) {
+        if ((mercenaryBody.getLinearVelocity().x < 0 || !charDirRight) && !region.isFlipX()) {
             region.flip(true, false);
-            mercenaryInGame.setCharDirRight(false);
-        } else if ((mercenaryBody.getLinearVelocity().x > 0 || mercenaryInGame.isCharDirRight()) && region.isFlipX()) {
+            charDirRight = false;
+        } else if ((mercenaryBody.getLinearVelocity().x > 0 || charDirRight) && region.isFlipX()) {
             region.flip(true, false);
-            mercenaryInGame.setCharDirRight(true);
-        }
+            charDirRight = true;
 
-       // stateTimer = currentState == previousState ? stateTimer + dt : 0;
-       // previousState = currentState;
+        }
+        stateTimer = currentState == previousState ? stateTimer + dt : 0;
+        previousState = currentState;
         return region;
     }
 
-    public void shoot() {
-    //    projectile = new Projectile(0, 0, 3, playScreen, mercenaryBody, );
-        projectile.shoot();
-        playScreen.getProjectiles().add(projectile);
+    public State getState() {
+        if (mercenaryBody.getLinearVelocity().y > 0) {
+            return State.JUMPING;
+        } else if (mercenaryBody.getLinearVelocity().y < 0) {
+            return State.FALLING;
+        } else if (mercenaryBody.getLinearVelocity().x != 0 && mercenaryBody.getLinearVelocity().x == 0) {
+            return State.RUNNING;
+        } else {
+            return State.STANDING;
+        }
     }
 
-    public Mercenary getMercenary() {
-        return mercenary;
+    public void shoot() {
+        //Projectile projectile = new Projectile(0, 0, 3, playScreen, mercenaryBody, mercenary);
+        //projectile.shoot();
+       // playScreen.getProjectiles().add(projectile);
+    }
+
+    public void calculateDamage(Mercenary mercenary, Projectile p, String s) {
+        if (s.equals("head")) {
+            System.out.println("headshot!");
+            currentHealth -= p.getDamage();
+            p.destroy(false);
+
+        } else if (s.equals("body")) {
+            System.out.println("bodyshot!");
+            currentHealth -= p.getDamage();
+            p.destroy(false);
+        }
+        //Check if dead
+        if (currentHealth <= 0) {
+            currentHealth = 0;
+            destroy();
+        }
+    }
+    
+    public Body getMercenaryBody() {
+        return mercenaryBody;
+    }
+
+    public int getJumpCounter() {
+        return jumpCounter;
+    }
+
+    public int getCurrentHealth() {
+        return currentHealth;
+    }
+
+    public int getCurrentMana() {
+        return currentMana;
+    }
+
+    public void destroy() {
+        killModel = true;
     }
 
     @Override
@@ -159,11 +216,4 @@ public class MercenaryModel extends Sprite{
         }
     }
 
-    public Body getMercenaryBody(){
-        return mercenaryBody;
-    }
-
-    public boolean isDead() {
-        return isDead;
-    }
 }

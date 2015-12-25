@@ -57,11 +57,10 @@ public class Projectile extends Sprite {
         lifeTime = 1;
 
         TextureRegion arrow = new TextureRegion(screen.getAtlas().findRegion("Arrow"), 0, 0, 40, 12);
-        setBounds(body.getPosition().x, body.getPosition().y, 40 / screen.game.PPM, 12 / screen.game.PPM);
+        setBounds(body.getPosition().x, body.getPosition().y, 40 / FightGame.PPM, 12 / FightGame.PPM);
         setRegion(arrow);
         setOrigin(getWidth(), getHeight() / 2);
         previousAngle = 0;
-
         defineProj();
 
     }
