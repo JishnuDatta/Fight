@@ -6,7 +6,7 @@ import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.jishd.fight.FightGame;
-import com.jishd.fight.Sprites.Classes.CharacterModel;
+import com.jishd.fight.Sprites.Classes.MercenaryModel;
 import com.jishd.fight.Sprites.Items.Projectile;
 
 public class WorldContactListener implements ContactListener {
@@ -23,16 +23,16 @@ public class WorldContactListener implements ContactListener {
             //For collision between bullet and a head
             case FightGame.HEAD_BIT | FightGame.PROJECTILE_BIT:
                 if (fixA.getFilterData().categoryBits == FightGame.HEAD_BIT) {
-                    ((CharacterModel) fixA.getUserData()).calculateDamage(((Projectile) fixB.getUserData()).getCharacter(), ((Projectile) fixB.getUserData()), "head");
+                    ((MercenaryModel) fixA.getUserData()).calculateDamage(((Projectile) fixB.getUserData()).getMercenary(), ((Projectile) fixB.getUserData()), "head");
                 } else {
-                    ((CharacterModel) fixB.getUserData()).calculateDamage(((Projectile) fixA.getUserData()).getCharacter(), ((Projectile) fixA.getUserData()), "head");
+                    ((MercenaryModel) fixB.getUserData()).calculateDamage(((Projectile) fixA.getUserData()).getMercenary(), ((Projectile) fixA.getUserData()), "head");
                 }
                 break;
             case FightGame.BODY_BIT | FightGame.PROJECTILE_BIT:
                 if (fixA.getFilterData().categoryBits == FightGame.BODY_BIT) {
-                    ((CharacterModel) fixA.getUserData()).calculateDamage(((Projectile) fixB.getUserData()).getCharacter(), ((Projectile) fixB.getUserData()), "body");
+                    ((MercenaryModel) fixA.getUserData()).calculateDamage(((Projectile) fixB.getUserData()).getMercenary(), ((Projectile) fixB.getUserData()), "body");
                 } else {
-                    ((CharacterModel) fixB.getUserData()).calculateDamage(((Projectile) fixA.getUserData()).getCharacter(), ((Projectile) fixA.getUserData()), "body");
+                    ((MercenaryModel) fixB.getUserData()).calculateDamage(((Projectile) fixA.getUserData()).getMercenary(), ((Projectile) fixA.getUserData()), "body");
                 }
                 break;
             case FightGame.PROJECTILE_BIT | FightGame.TILE_BIT:

@@ -69,19 +69,19 @@ public class MercenaryModel extends Sprite {
         //Copy from run
         //Standing
 
-        charStand = new TextureRegion(playScreen.getAtlas().findRegion("Archer"), 0, 0, 48, 64);
-        setBounds(100, 100, 48 / FightGame.PPM, 64 / FightGame.PPM);
+        charStand = mercenary.getTextureRegion(playScreen.getAtlas());
+        setBounds(spawnPointX, spawnPointY, 48 / FightGame.PPM, 64 / FightGame.PPM);
         setRegion(charStand);
         //setSize(48 / FightGame.PPM, 64 / FightGame.PPM);
         //setColor(0.3f);
 
         //Create the body
-        defineChar();
+        defineChar(spawnPointX, spawnPointY);
     }
 
-    public void defineChar() {
+    public void defineChar(int spawnPointX, int spawnPointY) {
         BodyDef bodyDef = new BodyDef();
-        bodyDef.position.set(100 / FightGame.PPM, 100 / FightGame.PPM);
+        bodyDef.position.set(spawnPointX / FightGame.PPM, spawnPointY / FightGame.PPM);
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         mercenaryBody = world.createBody(bodyDef);
         
@@ -158,7 +158,7 @@ public class MercenaryModel extends Sprite {
             return State.JUMPING;
         } else if (mercenaryBody.getLinearVelocity().y < 0) {
             return State.FALLING;
-        } else if (mercenaryBody.getLinearVelocity().x != 0 && mercenaryBody.getLinearVelocity().x == 0) {
+        } else if (mercenaryBody.getLinearVelocity().x != 0){
             return State.RUNNING;
         } else {
             return State.STANDING;
@@ -166,12 +166,15 @@ public class MercenaryModel extends Sprite {
     }
 
     public void handleInput(FightGame.Controls input) {
+
+
+
         switch(input) {
             case WEAPON1:
 
-                //Projectile projectile = new Projectile(0, 0, 3, playScreen, mercenaryBody, mercenary);
-                //projectile.shoot();
-                // playScreen.getProjectiles().add(projectile);
+                Projectile projectile = new Projectile(playScreen, mercenaryBody, mercenary, mercenary.getLoadout().getWeapon1());
+                projectile.shoot();
+                 playScreen.getProjectiles().add(projectile);
         }
     }
 
@@ -192,7 +195,11 @@ public class MercenaryModel extends Sprite {
             destroy();
         }
     }
-    
+
+    public Mercenary getMercenary() {
+        return mercenary;
+    }
+
     public Body getMercenaryBody() {
         return mercenaryBody;
     }

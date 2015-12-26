@@ -142,5 +142,4 @@ private void getDiversityDescription(){
     private int getLevel(){
         return level;
     }
-
 }

@@ -45,9 +45,9 @@ public class Stats {
         maxPhysical = FightGame.BASE_MAX_ATTRIBUTE_LEVEL;
         maxTech = FightGame.BASE_MAX_ATTRIBUTE_LEVEL;
 
-        switch (mercenary.type) {
+        switch (mercenary.getType()) {
             case RANGER:
-                maxRanged *= 2;
+               // maxRanged *= 2;
                 passive = "knockback";
                 break;
             case WIZARD:
@@ -72,7 +72,7 @@ public class Stats {
     }
 
     public void levelUp() {
-        switch (mercenary.type) {
+        switch (mercenary.getType()) {
             case RANGER:
                 ranged += FightGame.BASE_MAX_ATTRIBUTE_LEVEL / 100;
                 break;

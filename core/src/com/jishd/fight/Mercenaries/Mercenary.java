@@ -1,14 +1,13 @@
 package com.jishd.fight.Mercenaries;
 
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.jishd.fight.FightGame;
 import com.jishd.fight.PlayerData.Loadout;
 import com.jishd.fight.PlayerData.Player;
 import com.jishd.fight.PlayerData.Stats;
-import com.jishd.fight.Screens.PlayScreen;
 
 public abstract class Mercenary {
-    public FightGame.Mercenaries type;
     //Should i make this public??
     protected Player player;
     protected Stats stats;
@@ -19,7 +18,6 @@ public abstract class Mercenary {
         this.stats = new Stats(this);
         this.loadout = new Loadout(this);
         addAndEquipStarterItems();
-        type = getType();
     }
 
     public abstract void addAndEquipStarterItems();
@@ -30,13 +28,17 @@ public abstract class Mercenary {
         return player;
     }
 
+    public Loadout getLoadout() {
+        return loadout;
+    }
+
     public Stats getStats(){
         return stats;
     }
 
     //Just a placeholder for when I create real sprites, convert this to abstract afterwards
-    public TextureRegion getTextureRegion(){
-        return new TextureRegion(((PlayScreen)player.getFightGame().getScreen()).getAtlas().findRegion("Archer"), 0, 0, 48, 64);
+    public TextureRegion getTextureRegion(TextureAtlas atlas){
+        return new TextureRegion(atlas.findRegion("Archer"), 0, 0, 48, 64);
     }
 
     public int getRangedDamage() {

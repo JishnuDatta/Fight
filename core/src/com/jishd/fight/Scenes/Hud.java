@@ -11,7 +11,7 @@ import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.jishd.fight.FightGame;
-import com.jishd.fight.Sprites.Classes.CharacterModel;
+import com.jishd.fight.Sprites.Classes.MercenaryModel;
 
 import java.util.ArrayList;
 
@@ -22,13 +22,13 @@ public class Hud implements Disposable {
     public Stage stage;
     private Viewport viewport;
 
-    private ArrayList<CharacterModel> models;
+    private ArrayList<MercenaryModel> models;
 
     private ArrayList<Label> players;
     private ArrayList<Label> healths;
     private ArrayList<Label> manas;
 
-    public Hud(SpriteBatch sb, ArrayList<CharacterModel> cm) {
+    public Hud(SpriteBatch sb, ArrayList<MercenaryModel> cm) {
 
         viewport = new FitViewport(FightGame.V_WIDTH, FightGame.V_HEIGHT, new OrthographicCamera());
         stage = new Stage(viewport, sb);
@@ -42,8 +42,8 @@ public class Hud implements Disposable {
         manas = new ArrayList<Label>();
 
 
-        for (CharacterModel model : cm) {
-            players.add(new Label(model.getCharacter().toString(), new Label.LabelStyle(new BitmapFont(), Color.WHITE)));
+        for (MercenaryModel model : cm) {
+            players.add(new Label(model.getMercenary().toString(), new Label.LabelStyle(new BitmapFont(), Color.WHITE)));
             healths.add(new Label(String.format("%05d", model.getCurrentHealth()), new Label.LabelStyle(new BitmapFont(), Color.RED)));
             manas.add(new Label(String.format("%05d", model.getCurrentMana()), new Label.LabelStyle(new BitmapFont(), Color.CYAN)));
         }

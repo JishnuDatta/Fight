@@ -14,9 +14,9 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.jishd.fight.FightGame;
+import com.jishd.fight.PlayerData.Player;
 import com.jishd.fight.Scenes.Hud;
-import com.jishd.fight.Sprites.Classes.Character;
-import com.jishd.fight.Sprites.Classes.CharacterModel;
+import com.jishd.fight.Sprites.Classes.MercenaryModel;
 import com.jishd.fight.Sprites.Items.Projectile;
 import com.jishd.fight.Tools.B2WorldCreator;
 import com.jishd.fight.Tools.WorldContactListener;
@@ -41,25 +41,31 @@ public class PlayScreen implements Screen {
     private World world;
     private Box2DDebugRenderer b2dr;
 
-    //Storing all the character models on this level
-    private ArrayList<CharacterModel> models;
+    //Storing all the mercenary models on this level
+    private ArrayList<MercenaryModel> models;
 
     //All projectiles on this map
     private ArrayList<Projectile> projectiles;
-
-
-
-    public PlayScreen(FightGame game) {
-        //This may need to go to game instead, as sprites will also be used in the menu screens etc.
-        atlas = new TextureAtlas("FightGame.pack");
+    
+    //May need to also send an array of players entering in the game, if some dont want to play
+    public PlayScreen(FightGame game, FightGame.Stages stage) {
         this.game = game;
+        
+        //This may need to go to game instead, as sprites will also be used in the menu screens etc, maybe have 2 diff spritesheets?
+        atlas = new TextureAtlas("FightGame.pack");
+
         //Camera fitting
         gamecam = new OrthographicCamera();
         gamePort = new FitViewport(FightGame.V_WIDTH / FightGame.PPM, FightGame.V_HEIGHT / FightGame.PPM, gamecam);
 
-
         mapLoader = new TmxMapLoader();
-        map = mapLoader.load("Stage1.tmx");
+        switch(stage) {
+            case STAGE1:
+                map = mapLoader.load("Stage1.tmx");
+                break;
+            default:
+                break;
+        }
         renderer = new OrthogonalTiledMapRenderer(map, 1 / FightGame.PPM);
 
         //Move Camera to middle of map
@@ -73,15 +79,15 @@ public class PlayScreen implements Screen {
         new B2WorldCreator(world, map);
         world.setContactListener(new WorldContactListener());
 
-
-        //Create the new Character models for this level
-        models = new ArrayList<CharacterModel>();
-        for (Character player : game.getPlayerList()) {
-            models.add(player.spawnCharacterModel(this));
+        //Create the new Mercenary models for this level, and spawn them in
+        models = new ArrayList<MercenaryModel>();
+        for (Player player : game.getPlayerList()) {
+            //Setting 100, 100 as spawnpoint for now
+            models.add(new MercenaryModel(this, player.getCurrentMercenary(), 100, 100));
         }
         projectiles = new ArrayList<Projectile>();
 
-        hud = new Hud(game.batch, models);
+       // hud = new Hud(game.batch, models);
     }
 
     public TextureAtlas getAtlas() {
@@ -111,7 +117,7 @@ public class PlayScreen implements Screen {
         game.batch.setProjectionMatrix(gamecam.combined);
 
         game.batch.begin();
-        for (CharacterModel model : models) {
+        for (MercenaryModel model : models) {
             model.draw(game.batch);
         }
         for (Projectile projectile : projectiles) {
@@ -121,8 +127,8 @@ public class PlayScreen implements Screen {
         //Set batch to draw hud camera
 
         game.batch.end();
-        game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
-        hud.stage.draw();
+        //game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
+       // hud.stage.draw();
 
     }
 
@@ -131,50 +137,42 @@ public class PlayScreen implements Screen {
         gamePort.update(width, height);
     }
 
-
     public void handleInput(float dt) {
-
-        for (CharacterModel model : models) {
+        for (MercenaryModel model : models) {
             //Jump
-            if (Gdx.input.isKeyJustPressed(model.getCharacter().controlList[0]) && (model.jumpCounter < model.getCharacter().numberOfJumps())) {
-                model.b2body.applyLinearImpulse(new Vector2(0, 8f), model.b2body.getWorldCenter(), true);
-                model.jumpCounter++;
+            if (Gdx.input.isKeyJustPressed(model.getMercenary().getPlayer().controls[0])) {
+                model.getMercenaryBody().applyLinearImpulse(new Vector2(0, 8f), model.getMercenaryBody().getWorldCenter(), true);
             }
             //Left
-            if (Gdx.input.isKeyPressed(model.getCharacter().controlList[1]) && model.b2body.getLinearVelocity().x >= -3) {
-                model.b2body.applyLinearImpulse(new Vector2(-3, 0), model.b2body.getWorldCenter(), true);
+            if (Gdx.input.isKeyPressed(model.getMercenary().getPlayer().controls[1]) && model.getMercenaryBody().getLinearVelocity().x >= -3) {
+                model.getMercenaryBody().applyLinearImpulse(new Vector2(-3, 0), model.getMercenaryBody().getWorldCenter(), true);
             }
             //Right
-            if (Gdx.input.isKeyPressed(model.getCharacter().controlList[2]) && model.b2body.getLinearVelocity().x <= 3) {
-                model.b2body.applyLinearImpulse(new Vector2(3, 0), model.b2body.getWorldCenter(), true);
+            if (Gdx.input.isKeyPressed(model.getMercenary().getPlayer().controls[2]) && model.getMercenaryBody().getLinearVelocity().x <= 3) {
+                model.getMercenaryBody().applyLinearImpulse(new Vector2(3, 0), model.getMercenaryBody().getWorldCenter(), true);
             }
             //Shoot
-            if (Gdx.input.isKeyJustPressed(model.getCharacter().controlList[4])) {
-                model.shoot();
+            if (Gdx.input.isKeyJustPressed(model.getMercenary().getPlayer().controls[4])) {
+                model.handleInput(FightGame.Controls.WEAPON1);
             }
-
         }
-
-
     }
 
     public void update(float dt) {
         handleInput(dt);
         world.step(1 / 60f, 6, 2);
 
-        for (CharacterModel model : models) {
+        for (MercenaryModel model : models) {
             model.update(dt);
         }
 
-        hud.update();
+       // hud.update();
         for (Projectile projectile : projectiles) {
             projectile.update(dt);
         }
         gamecam.update();
 
         renderer.setView(gamecam);
-
-
     }
 
     @Override

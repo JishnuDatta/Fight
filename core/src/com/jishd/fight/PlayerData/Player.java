@@ -17,8 +17,11 @@ public class Player {
     private FightGame fightGame;
     private String name;
     private Inventory inventory;
-    private int[] controls;
+    //Need to make private at one point
+    public int[] controls;
     private ArrayList<Mercenary> fighterList;
+
+    private Mercenary currentMercenary;
 
     public Player(FightGame fightGame, String name) {
         this.fightGame = fightGame;
@@ -28,34 +31,35 @@ public class Player {
         fighterList = new ArrayList<Mercenary>();
         //Adding a new human (symbolising yourself)
         fighterList.add(new Human(this));
+        currentMercenary = fighterList.get(0);
     }
 
-    //Buys a new mercenary and their gear, enum is just a placeholder for gui
-    public void buyMercenary(FightGame.Mercenaries m, Player player) {
+    //Buys a new mercenary and their gear and sets them as the current mercenary, enum is just a placeholder for gui
+    public void buyMercenary(FightGame.Mercenaries m) {
+        Mercenary newMercenary;
         switch (m) {
             case RANGER:
-                Mercenary ranger = new Ranger(this);
-                fighterList.add(ranger);
+                newMercenary = new Ranger(this);
                 break;
             case WIZARD:
-                Mercenary wizard = new Wizard(this);
-                fighterList.add(wizard);
+                newMercenary = new Wizard(this);
                 break;
             case ASSASSIN:
-                Mercenary assassin = new Assassin(this);
-                fighterList.add(assassin);
+                newMercenary = new Assassin(this);
                 break;
             case KNIGHT:
-                Mercenary knight = new Knight(this);
-                fighterList.add(knight);
+                newMercenary = new Knight(this);
                 break;
             case TECH:
-                Mercenary tech = new Tech(this);
-                fighterList.add(tech);
+                newMercenary = new Tech(this);
+
                 break;
             default:
+                newMercenary = new Human(this);
                 break;
         }
+        fighterList.add(newMercenary);
+        currentMercenary = newMercenary;
     }
 
     public String getName() {
@@ -72,5 +76,9 @@ public class Player {
 
     public FightGame getFightGame() {
         return fightGame;
+    }
+
+    public Mercenary getCurrentMercenary() {
+        return currentMercenary;
     }
 }
