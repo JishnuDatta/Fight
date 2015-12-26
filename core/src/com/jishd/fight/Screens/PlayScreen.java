@@ -144,12 +144,12 @@ public class PlayScreen implements Screen {
                 model.getMercenaryBody().applyLinearImpulse(new Vector2(0, 8f), model.getMercenaryBody().getWorldCenter(), true);
             }
             //Left
-            if (Gdx.input.isKeyPressed(model.getMercenary().getPlayer().controls[1]) && model.getMercenaryBody().getLinearVelocity().x >= -3) {
-                model.getMercenaryBody().applyLinearImpulse(new Vector2(-3, 0), model.getMercenaryBody().getWorldCenter(), true);
+            if (Gdx.input.isKeyPressed(model.getMercenary().getPlayer().controls[1]) && model.getMercenaryBody().getLinearVelocity().x >= -10) {
+                model.getMercenaryBody().applyLinearImpulse(new Vector2(-10, 0), model.getMercenaryBody().getWorldCenter(), true);
             }
             //Right
-            if (Gdx.input.isKeyPressed(model.getMercenary().getPlayer().controls[2]) && model.getMercenaryBody().getLinearVelocity().x <= 3) {
-                model.getMercenaryBody().applyLinearImpulse(new Vector2(3, 0), model.getMercenaryBody().getWorldCenter(), true);
+            if (Gdx.input.isKeyPressed(model.getMercenary().getPlayer().controls[2]) && model.getMercenaryBody().getLinearVelocity().x <= 10) {
+                model.getMercenaryBody().applyLinearImpulse(new Vector2(10, 0), model.getMercenaryBody().getWorldCenter(), true);
             }
             //Shoot
             if (Gdx.input.isKeyJustPressed(model.getMercenary().getPlayer().controls[4])) {

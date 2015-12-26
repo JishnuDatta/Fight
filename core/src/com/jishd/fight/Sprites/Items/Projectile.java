@@ -24,16 +24,18 @@ public class Projectile extends Sprite {
     private boolean killProjectile;
     private boolean deadProjectile;
     private boolean hitEnvironment;
-    private int deathTimer;
+    private float deathTimer;
+
+    private float previousAngle;
+
+    private boolean projDirRight;
     
     private Body arrowBody;
 
     private int damage;
-    
-    private float previousAngle;
-    
+
 //Float x and y become projectile speed
-    public Projectile(PlayScreen playScreen, Body mercenaryBody, Mercenary mercenary, Item item) {
+    public Projectile(PlayScreen playScreen, Body mercenaryBody, Mercenary mercenary, Item item, float degrees) {
         this.playScreen = playScreen;
         world = playScreen.getWorld();
         this.mercenary = mercenary;
@@ -47,24 +49,26 @@ public class Projectile extends Sprite {
 
         previousAngle = 0;
 
+        projDirRight =  (degrees < 180) ? true : false;
+
         TextureRegion arrow = new TextureRegion(playScreen.getAtlas().findRegion("Arrow"), 0, 0, 40, 12);
         setBounds(mercenaryBody.getPosition().x, mercenaryBody.getPosition().y, 40 / FightGame.PPM, 12 / FightGame.PPM);
         setRegion(arrow);
-        setOrigin(getWidth(), getHeight() / 2);
-
+        setOrigin(projDirRight ? getWidth() : 0, getHeight() / 2);
+        flip(!projDirRight, false);
         defineProj();
-
+        float velocityX = new Float(20 * Math.cos(MathUtils.degreesToRadians * degrees));
+        float velocityY = new Float(20 * Math.sin(MathUtils.degreesToRadians * degrees));
+        arrowBody.applyLinearImpulse(new Vector2(velocityX, velocityY), arrowBody.getWorldCenter(), true);
     }
 
     public void update(float dt) {
         if (killProjectile && !deadProjectile) {
             world.destroyBody(arrowBody);
             deadProjectile = true;
-        } else if(deadProjectile && hitEnvironment){
+        } else if(deadProjectile && hitEnvironment && deathTimer < 1){
             deathTimer += dt;
-            System.out.println(deathTimer);
-            if(deathTimer > 1)
-            setAlpha(0.5f);
+            setAlpha(1.0f - (deathTimer));
         }
         else if (!deadProjectile) {
             float angle = (float) (MathUtils.radiansToDegrees * Math.tan(arrowBody.getLinearVelocity().y / arrowBody.getLinearVelocity().x));
@@ -78,7 +82,7 @@ public class Projectile extends Sprite {
     public void defineProj() {
 
         BodyDef bodyDef = new BodyDef();
-        bodyDef.position.set(mercenaryBody.getPosition().x + 20 / FightGame.PPM, mercenaryBody.getPosition().y);
+        bodyDef.position.set(projDirRight ? mercenaryBody.getPosition().x + 10/ FightGame.PPM : mercenaryBody.getPosition().x - 20/ FightGame.PPM, mercenaryBody.getPosition().y);
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         arrowBody = world.createBody(bodyDef);
         arrowBody.setBullet(true);
@@ -91,10 +95,6 @@ public class Projectile extends Sprite {
 
         fixtureDef.filter.categoryBits = FightGame.PROJECTILE_BIT;
         arrowBody.createFixture(fixtureDef).setUserData(this);
-    }
-
-    public void shoot() {
-        arrowBody.applyLinearImpulse(new Vector2(20f, 10f), arrowBody.getWorldCenter(), true);
     }
 
     public int getDamage() {
@@ -111,7 +111,7 @@ public class Projectile extends Sprite {
     }
 
     public void draw(Batch batch) {
-        if (!deadProjectile || (hitEnvironment && deathTimer < 5)) {
+        if (!deadProjectile || (hitEnvironment && deathTimer < 1f)) {
             super.draw(batch);
         }
     }

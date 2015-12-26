@@ -28,6 +28,7 @@ public class MercenaryModel extends Sprite {
     private int jumpCounter;
 
     private boolean killModel, isDead;
+    private float deathTimer;
 
     private enum State {STANDING, RUNNING, JUMPING, FALLING}
     private State currentState;
@@ -53,6 +54,7 @@ public class MercenaryModel extends Sprite {
 
         killModel = false;
         isDead = false;
+        deathTimer = 0;
 
         currentState = State.STANDING;
         previousState = State.STANDING;
@@ -108,6 +110,10 @@ public class MercenaryModel extends Sprite {
         if (killModel && !isDead) {
             world.destroyBody(mercenaryBody);
             isDead = true;
+        }
+        else if(isDead && deathTimer < 1){
+                deathTimer += dt;
+                setAlpha(1.0f - (deathTimer));
         }
         if (!isDead) {
             if (currentState == State.STANDING || currentState == State.RUNNING) {
@@ -172,8 +178,7 @@ public class MercenaryModel extends Sprite {
         switch(input) {
             case WEAPON1:
 
-                Projectile projectile = new Projectile(playScreen, mercenaryBody, mercenary, mercenary.getLoadout().getWeapon1());
-                projectile.shoot();
+                Projectile projectile = new Projectile(playScreen, mercenaryBody, mercenary, mercenary.getLoadout().getWeapon1(), charDirRight ? 0 : 180);
                  playScreen.getProjectiles().add(projectile);
         }
     }
@@ -222,7 +227,7 @@ public class MercenaryModel extends Sprite {
 
     @Override
     public void draw(Batch batch) {
-        if (!isDead) {
+        if (!isDead || (deathTimer < 1)) {
             super.draw(batch);
         }
     }
