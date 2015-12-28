@@ -46,11 +46,12 @@ public class PlayScreen implements Screen {
 
     //All projectiles on this map
     private ArrayList<Projectile> projectiles;
+
     
     //May need to also send an array of players entering in the game, if some dont want to play
     public PlayScreen(FightGame game, FightGame.Stages stage) {
         this.game = game;
-        
+
         //This may need to go to game instead, as sprites will also be used in the menu screens etc, maybe have 2 diff spritesheets?
         atlas = new TextureAtlas("FightGame.atlas");
 
@@ -139,22 +140,7 @@ public class PlayScreen implements Screen {
 
     public void handleInput(float dt) {
         for (MercenaryModel model : models) {
-            //Jump
-            if (Gdx.input.isKeyJustPressed(model.getMercenary().getPlayer().controls[0])) {
-                model.getMercenaryBody().applyLinearImpulse(new Vector2(0, 8f), model.getMercenaryBody().getWorldCenter(), true);
-            }
-            //Left
-            if (Gdx.input.isKeyPressed(model.getMercenary().getPlayer().controls[1]) && model.getMercenaryBody().getLinearVelocity().x >= -3) {
-                model.getMercenaryBody().applyLinearImpulse(new Vector2(-3f, 0), model.getMercenaryBody().getWorldCenter(), true);
-            }
-            //Right
-            if (Gdx.input.isKeyPressed(model.getMercenary().getPlayer().controls[2]) && model.getMercenaryBody().getLinearVelocity().x <= 3) {
-                model.getMercenaryBody().applyLinearImpulse(new Vector2(3f, 0), model.getMercenaryBody().getWorldCenter(), true);
-            }
-            //Shoot
-            if (Gdx.input.isKeyJustPressed(model.getMercenary().getPlayer().controls[4])) {
-                model.handleInput(FightGame.Controls.WEAPON1);
-            }
+            model.handleInput();
         }
     }
 

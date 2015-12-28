@@ -1,5 +1,5 @@
 package com.jishd.fight.Tools;
-
+//need to fade healthbars out when players die
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -45,7 +45,6 @@ public class HealthAndManaBarCreator{
        // healthLabel.setPosition(mercenaryModel.getX() + mercenaryModel.getWidth() / 2 - healthBarEmpty.getWidth() / 2, mercenaryModel.getY() + mercenaryModel.getHeight() + 20 / FightGame.PPM);
        // manaLabel.setPosition(mercenaryModel.getX() + mercenaryModel.getWidth() / 2 - manaBarEmpty.getWidth() / 2, mercenaryModel.getY() + mercenaryModel.getHeight() + 9 / FightGame.PPM);
         healthBarFull.setScale( ( mercenaryModel.getCurrentHealth()) / (mercenaryModel.getMercenary().getHealthMult()), 1);
-        System.out.println((mercenaryModel.getCurrentHealth()) / (mercenaryModel.getMercenary().getHealthMult()));
        //manaBarFull.setSize( (40) * (mercenaryModel.getHealth() / mercenaryModel.getMercenary().getHealthMult()) / FightGame.PPM, 5/ FightGame.PPM);
 
     }

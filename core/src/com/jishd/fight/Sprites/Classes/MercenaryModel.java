@@ -1,5 +1,6 @@
 package com.jishd.fight.Sprites.Classes;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -167,10 +168,10 @@ public class MercenaryModel extends Sprite {
                 break;
 
         }
-        if ((mercenaryBody.getLinearVelocity().x < 0 || !charDirRight) && !region.isFlipX()) {
+        if ((!charDirRight) && !region.isFlipX()) {
             region.flip(true, false);
             charDirRight = false;
-        } else if ((mercenaryBody.getLinearVelocity().x > 0 || charDirRight) && region.isFlipX()) {
+        } else if ((charDirRight) && region.isFlipX()) {
             region.flip(true, false);
             charDirRight = true;
 
@@ -192,13 +193,23 @@ public class MercenaryModel extends Sprite {
         }
     }
 
-    public void handleInput(FightGame.Controls input) {
-
-
-
-        switch(input) {
-            case WEAPON1:
-
+    public void handleInput() {
+        //Jump
+        if (Gdx.input.isKeyJustPressed(mercenary.getPlayer().controls[0])) {
+            mercenaryBody.applyLinearImpulse(new Vector2(0, 8f), mercenaryBody.getWorldCenter(), true);
+        }
+        //Left
+        if (Gdx.input.isKeyPressed(mercenary.getPlayer().controls[1]) && mercenaryBody.getLinearVelocity().x >= -5) {
+            mercenaryBody.applyLinearImpulse(new Vector2(-1f, 0), mercenaryBody.getWorldCenter(), true);
+            charDirRight = false;
+        }
+        //Right
+        if (Gdx.input.isKeyPressed(mercenary.getPlayer().controls[2]) && mercenaryBody.getLinearVelocity().x <= 5) {
+            mercenaryBody.applyLinearImpulse(new Vector2(1f, 0), mercenaryBody.getWorldCenter(), true);
+            charDirRight = true;
+        }
+        //Shoot
+        if (Gdx.input.isKeyJustPressed( mercenary.getPlayer().controls[4])) {
                 Projectile projectile = new Projectile(playScreen, mercenaryBody, mercenary, mercenary.getLoadout().getWeapon1(), charDirRight ? 0 : 180);
                  playScreen.getProjectiles().add(projectile);
         }
@@ -252,5 +263,7 @@ public class MercenaryModel extends Sprite {
             healthAndManaBarCreator.draw(batch);
         }
     }
+
+
 
 }

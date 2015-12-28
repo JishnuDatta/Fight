@@ -83,6 +83,14 @@ public class FightGame extends Game {
         playerList.get(0).controls[3] = Input.Keys.DOWN;
         playerList.get(0).controls[4] = Input.Keys.SPACE;
 
+        for(int i = 1; i < 4; i++){
+            playerList.get(i).controls[0] = Input.Keys.Q;
+            playerList.get(i).controls[1] = Input.Keys.Q;
+            playerList.get(i).controls[2] = Input.Keys.Q;
+            playerList.get(i).controls[3] = Input.Keys.Q;
+            playerList.get(i).controls[4] = Input.Keys.Q;
+        }
+
         //Creates the sprite batch and the screen and sets the current screen to the PlayScreen
         batch = new SpriteBatch();
         //This will be replaced by menuscreen gui
