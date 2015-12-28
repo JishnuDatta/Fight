@@ -15,6 +15,7 @@ import com.jishd.fight.FightGame;
 import com.jishd.fight.Mercenaries.Mercenary;
 import com.jishd.fight.Screens.PlayScreen;
 import com.jishd.fight.Sprites.Items.Projectile;
+import com.jishd.fight.Tools.HealthAndManaBarCreator;
 
 public class MercenaryModel extends Sprite {
 
@@ -22,7 +23,7 @@ public class MercenaryModel extends Sprite {
     private PlayScreen playScreen;
     private World world;
 
-    private int currentHealth, currentMana;
+    private float currentHealth, currentMana;
 
     private boolean charDirRight;
     private int jumpCounter;
@@ -40,6 +41,8 @@ public class MercenaryModel extends Sprite {
     private Animation charJump;
     
     private Body mercenaryBody;
+
+    private HealthAndManaBarCreator healthAndManaBarCreator;
 
     public MercenaryModel(PlayScreen playScreen, Mercenary mercenary, int spawnPointX, int spawnPointY){
         this.mercenary = mercenary;
@@ -60,6 +63,8 @@ public class MercenaryModel extends Sprite {
         previousState = State.STANDING;
         stateTimer = 0;
 
+        healthAndManaBarCreator = new HealthAndManaBarCreator(this);
+
         //Setting up Run
         // Array<TextureRegion> frames = new Array<TextureRegion>();
         //   for(int i = 0; i < 1; i++){
@@ -72,10 +77,10 @@ public class MercenaryModel extends Sprite {
         //Standing
 
         charStand = mercenary.getTextureRegion(playScreen.getAtlas());
-        setBounds(spawnPointX, spawnPointY, 48 / FightGame.PPM, 64 / FightGame.PPM);
+        setBounds(spawnPointX, spawnPointY, 32 / FightGame.PPM, 72 / FightGame.PPM);
         setRegion(charStand);
         //setSize(48 / FightGame.PPM, 64 / FightGame.PPM);
-        //setColor(0.3f);
+        //setAlpha(0.3f);
 
         //Create the body
         defineChar(spawnPointX, spawnPointY);
@@ -90,20 +95,30 @@ public class MercenaryModel extends Sprite {
         //Create the head hitbox
         FixtureDef headFixture = new FixtureDef();
         CircleShape head = new CircleShape();
-        head.setRadius(6 / FightGame.PPM);
-        head.setPosition(new Vector2(-7 / FightGame.PPM, 21 / FightGame.PPM));
+        head.setRadius(7 / FightGame.PPM);
+        head.setPosition(new Vector2(0, 48 / FightGame.PPM));
         headFixture.shape = head;
         headFixture.filter.categoryBits = FightGame.HEAD_BIT;
         mercenaryBody.createFixture(headFixture).setUserData(this);
 
-        //Create lowerbody hitbox
+        //Create torso hitbox - this will need to be split up later
         FixtureDef bodyFixture = new FixtureDef();
         PolygonShape torso = new PolygonShape();
-        torso.setAsBox(10 / FightGame.PPM, 21 / FightGame.PPM, new Vector2(-5 / FightGame.PPM, -7 / FightGame.PPM), 0);
+        torso.setAsBox(11 / FightGame.PPM, 14 / FightGame.PPM, new Vector2(0 / FightGame.PPM, 28 / FightGame.PPM), 0);
         bodyFixture.shape = torso;
         // bodyFixture.friction = 10;
         bodyFixture.filter.categoryBits = FightGame.BODY_BIT;
         mercenaryBody.createFixture(bodyFixture).setUserData(this);
+
+        //Create lowerbody hitbox
+        FixtureDef legFixture = new FixtureDef();
+        PolygonShape legs = new PolygonShape();
+        legs.setAsBox(11 / FightGame.PPM, 14 / FightGame.PPM, new Vector2(0 / FightGame.PPM, 0 / FightGame.PPM), 0);
+        legFixture.shape = legs;
+        // bodyFixture.friction = 10;
+        //this should be changed
+        legFixture.filter.categoryBits = FightGame.BODY_BIT;
+        mercenaryBody.createFixture(legFixture).setUserData(this);
     }
 
     public void update(float dt) {
@@ -116,11 +131,17 @@ public class MercenaryModel extends Sprite {
                 setAlpha(1.0f - (deathTimer));
         }
         if (!isDead) {
+            //Check if dead
+            if (currentHealth <= 0) {
+                currentHealth = 0;
+                destroy();
+            }
             if (currentState == State.STANDING || currentState == State.RUNNING) {
                 jumpCounter = 0;
             }
             setPosition(mercenaryBody.getPosition().x - getWidth() / 2, mercenaryBody.getPosition().y - getWidth() / 2);
             setRegion(getFrame(dt));
+            healthAndManaBarCreator.update();
         }
     }
 
@@ -194,11 +215,6 @@ public class MercenaryModel extends Sprite {
             currentHealth -= p.getDamage();
             p.destroy(false);
         }
-        //Check if dead
-        if (currentHealth <= 0) {
-            currentHealth = 0;
-            destroy();
-        }
     }
 
     public Mercenary getMercenary() {
@@ -213,11 +229,15 @@ public class MercenaryModel extends Sprite {
         return jumpCounter;
     }
 
-    public int getCurrentHealth() {
+    public PlayScreen getPlayScreen() {
+        return playScreen;
+    }
+
+    public float getCurrentHealth() {
         return currentHealth;
     }
 
-    public int getCurrentMana() {
+    public float getCurrentMana() {
             return currentMana;
         }
 
@@ -229,6 +249,7 @@ public class MercenaryModel extends Sprite {
     public void draw(Batch batch) {
         if (!isDead || (deathTimer < 1)) {
             super.draw(batch);
+            healthAndManaBarCreator.draw(batch);
         }
     }
 

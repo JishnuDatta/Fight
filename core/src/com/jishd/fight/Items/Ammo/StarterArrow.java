@@ -6,8 +6,8 @@ import com.jishd.fight.FightGame;
 import com.jishd.fight.Items.Item;
 
 public class StarterArrow extends Item{
-    public StarterArrow(int rangedAttributes, int magicAttributes, int shadowAttributes, int physicalAttributes, int techAttributes) {
-        super(rangedAttributes, magicAttributes, shadowAttributes, physicalAttributes, techAttributes);
+    public StarterArrow(int level, int rangedAttributes, int magicAttributes, int shadowAttributes, int physicalAttributes, int techAttributes) {
+        super(level, rangedAttributes, magicAttributes, shadowAttributes, physicalAttributes, techAttributes);
     }
 
     @Override

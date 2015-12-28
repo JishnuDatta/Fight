@@ -12,8 +12,8 @@ public abstract class Item {
     //Level needed to equip item (also gives indication of the power of the item)
     private int level;
 
-    //Used for randomly generated items
-    public Item(int rangedAttributes, int magicAttributes, int shadowAttributes, int physicalAttributes, int techAttributes) {
+    public Item(int level, int rangedAttributes, int magicAttributes, int shadowAttributes, int physicalAttributes, int techAttributes) {
+        this.level = level;
         this.rangedAttributes = rangedAttributes;
         this.magicAttributes = magicAttributes;
         this.shadowAttributes = shadowAttributes;
@@ -22,8 +22,6 @@ public abstract class Item {
 
         totalAttributes = rangedAttributes + magicAttributes + shadowAttributes + physicalAttributes + techAttributes;
         getDiversity();
-        //(Sum of attributes / total attributes) * 100
-        level = totalAttributes / 5;
         getTier();
         getDiversityDescription();
     }
@@ -139,7 +137,7 @@ private void getDiversityDescription(){
 
      public abstract FightGame.ItemType getItemType();
 
-    private int getLevel(){
+    public int getLevel(){
         return level;
     }
 }

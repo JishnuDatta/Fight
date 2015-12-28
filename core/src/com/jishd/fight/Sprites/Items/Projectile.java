@@ -15,6 +15,8 @@ import com.jishd.fight.Items.Item;
 import com.jishd.fight.Mercenaries.Mercenary;
 import com.jishd.fight.Screens.PlayScreen;
 
+//Tried to add animation to the projectiles but it looks crap, remove when possible and revert back to singular image.
+
 public class Projectile extends Sprite {
     private PlayScreen playScreen;
     private World world;
@@ -32,7 +34,7 @@ public class Projectile extends Sprite {
     
     private Body arrowBody;
 
-    private int damage;
+    private float damage;
 
 //Float x and y become projectile speed
     public Projectile(PlayScreen playScreen, Body mercenaryBody, Mercenary mercenary, Item item, float degrees) {
@@ -48,17 +50,17 @@ public class Projectile extends Sprite {
         damage = mercenary.getRangedDamage();
 
         previousAngle = 0;
+        int arrowSpeed = 40;
 
         projDirRight =  (degrees < 180) ? true : false;
 
-        TextureRegion arrow = new TextureRegion(playScreen.getAtlas().findRegion("Arrow"), 0, 0, 40, 12);
-        setBounds(mercenaryBody.getPosition().x, mercenaryBody.getPosition().y, 40 / FightGame.PPM, 12 / FightGame.PPM);
-        setRegion(arrow);
+        setBounds(mercenaryBody.getPosition().x, mercenaryBody.getPosition().y, 30 / FightGame.PPM, 6 / FightGame.PPM);
         setOrigin(projDirRight ? getWidth() : 0, getHeight() / 2);
+        setRegion(new TextureRegion(playScreen.getAtlas().findRegion("Arrow"), 0, 0, 60, 12));
         flip(!projDirRight, false);
         defineProj();
-        float velocityX = new Float(20 * Math.cos(MathUtils.degreesToRadians * degrees));
-        float velocityY = new Float(20 * Math.sin(MathUtils.degreesToRadians * degrees));
+        float velocityX = new Float(arrowSpeed * Math.cos(MathUtils.degreesToRadians * degrees));
+        float velocityY = new Float(arrowSpeed * Math.sin(MathUtils.degreesToRadians * degrees));
         arrowBody.applyLinearImpulse(new Vector2(velocityX, velocityY), arrowBody.getWorldCenter(), true);
     }
 
@@ -74,7 +76,7 @@ public class Projectile extends Sprite {
             float angle = (float) (MathUtils.radiansToDegrees * Math.tan(arrowBody.getLinearVelocity().y / arrowBody.getLinearVelocity().x));
             rotate(angle - previousAngle);
 
-            setPosition(arrowBody.getPosition().x - getWidth(), arrowBody.getPosition().y - getHeight() / 2);
+            setPosition(arrowBody.getPosition().x + (projDirRight ? - getWidth() : 0), arrowBody.getPosition().y - getHeight() / 2);
             previousAngle = angle;
         }
     }
@@ -82,14 +84,15 @@ public class Projectile extends Sprite {
     public void defineProj() {
 
         BodyDef bodyDef = new BodyDef();
-        bodyDef.position.set(projDirRight ? mercenaryBody.getPosition().x + 10/ FightGame.PPM : mercenaryBody.getPosition().x - 20/ FightGame.PPM, mercenaryBody.getPosition().y);
+        bodyDef.position.set(projDirRight ? mercenaryBody.getPosition().x + 20/ FightGame.PPM : mercenaryBody.getPosition().x - 20/ FightGame.PPM, mercenaryBody.getPosition().y + 30/FightGame.PPM);
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         arrowBody = world.createBody(bodyDef);
         arrowBody.setBullet(true);
 
         FixtureDef fixtureDef = new FixtureDef();
         CircleShape shape = new CircleShape();
-        shape.setRadius(3 / FightGame.PPM);
+        shape.setRadius(2 / FightGame.PPM);
+        shape.setPosition(new Vector2(projDirRight ? -5 / FightGame.PPM : 5 / FightGame.PPM, 0));
 
         fixtureDef.shape = shape;
 
@@ -97,7 +100,7 @@ public class Projectile extends Sprite {
         arrowBody.createFixture(fixtureDef).setUserData(this);
     }
 
-    public int getDamage() {
+    public float getDamage() {
         return damage;
     }
 

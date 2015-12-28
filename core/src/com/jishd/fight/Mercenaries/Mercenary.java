@@ -38,106 +38,107 @@ public abstract class Mercenary {
 
     //Just a placeholder for when I create real sprites, convert this to abstract afterwards
     public TextureRegion getTextureRegion(TextureAtlas atlas){
-        return new TextureRegion(atlas.findRegion("Archer"), 0, 0, 48, 64);
+        return new TextureRegion(atlas.findRegion("Archer"), 0, 0, 32, 72);
     }
 
-    public int getRangedDamage() {
-        return stats.getRangedDamage() + loadout.getRangedDamage();
+    public float getRangedDamage() {
+        return stats.getRangedDamage() + loadout.getRangedDamage() + 30;
     }
 
-    public int getHeadshotDamage() {
+    public float getHeadshotDamage() {
         return stats.getHeadshotDamage() + loadout.getHeadshotDamage();
     }
 
-    public int getProjectileSpeed() {
+    public float getProjectileSpeed() {
         return stats.getProjectileSpeed() + loadout.getProjectileSpeed();
     }
 
-    public int getAttackSpeed() {
+    public float getAttackSpeed() {
         return stats.getAttackSpeed() + loadout.getAttackSpeed();
     }
 
-    public int getMagicResistance() {
+    public float getMagicResistance() {
         return stats.getMagicResistance() + loadout.getMagicResistance();
     }
 
-    public int getTechResistance() {
+    public float getTechResistance() {
         return stats.getTechResistance() + loadout.getTechResistance();
     }
 
-    public int getMagicDamage() {
+    public float getMagicDamage() {
         return stats.getMagicDamage() + loadout.getMagicDamage();
     }
 
-    public int getManaMult() {
+    public float getManaMult() {
         return stats.getManaMult() + loadout.getManaMult();
     }
 
-    public int getManaRegen() {
+    public float getManaRegen() {
         return stats.getManaMult() + loadout.getManaRegen();
     }
 
-    public int getSpellPen() {
+    public float getSpellPen() {
         return stats.getSpellPen() + loadout.getSpellPen();
     }
 
-    public int getPhysicalResistance() {
+    public float getPhysicalResistance() {
         return stats.getPhysicalResistance() + loadout.getPhysicalResistance();
     }
 
-    public int getShadowDamage() {
+    public float getShadowDamage() {
         return stats.getShadowDamage() + loadout.getShadowDamage();
     }
 
-    public int getBackstabDamage() {
+    public float getBackstabDamage() {
         return stats.getBackstabDamage() + loadout.getBackstabDamage();
     }
 
-    public int getMovementSpeed() {
+    public float getMovementSpeed() {
         return stats.getMovementSpeed() + loadout.getMovementSpeed();
     }
 
-    public int getInvisibility() {
+    public float getInvisibility() {
         return stats.getInvisibility() + loadout.getInvisibility();
     }
 
-    public int getPhysicalDamage() {
+    public float getPhysicalDamage() {
         return stats.getPhysicalDamage() + loadout.getPhysicalDamage();
     }
 
-    public int getHealthMult() {
-        return stats.getHealthMult() + loadout.getHealthMult();
+    //Hardcoding in 100 health for now.
+    public float getHealthMult() {
+        return stats.getHealthMult() + loadout.getHealthMult() + 100;
     }
 
-    public int getHealthRegen() {
+    public float getHealthRegen() {
         return stats.getHealthRegen() + loadout.getHealthRegen();
     }
 
-    public int getFrontDamage() {
+    public float getFrontDamage() {
         return stats.getFrontDamage() + loadout.getFrontDamage();
     }
 
-    public int getRangedResistance() {
+    public float getRangedResistance() {
         return stats.getRangedResistance() + loadout.getRangedResistance();
     }
 
-    public int getTechDamage() {
+    public float getTechDamage() {
         return stats.getTechDamage() + loadout.getTechDamage();
     }
 
-    public int getExplosionRange() {
+    public float getExplosionRange() {
         return stats.getExplosionRange() + loadout.getExplosionRange();
     }
 
-    public int getLegAndFootDamage() {
+    public float getLegAndFootDamage() {
         return stats.getLegAndFootDamage() + loadout.getLegAndFootDamage();
     }
 
-    public int getPassiveResistance() {
+    public float getPassiveResistance() {
         return stats.getPassiveResistance() + loadout.getPassiveResistance();
     }
 
-    public int getShadowResistance() {
+    public float getShadowResistance() {
         return stats.getShadowResistance() + loadout.getShadowResistance();
     }
 

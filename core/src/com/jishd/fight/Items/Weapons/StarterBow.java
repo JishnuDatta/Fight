@@ -4,8 +4,8 @@ import com.jishd.fight.FightGame;
 import com.jishd.fight.Items.Item;
 
 public class StarterBow extends Item {
-    public StarterBow(int rangedAttributes, int magicAttributes, int shadowAttributes, int physicalAttributes, int techAttributes) {
-        super(rangedAttributes, magicAttributes, shadowAttributes, physicalAttributes, techAttributes);
+    public StarterBow(int level, int rangedAttributes, int magicAttributes, int shadowAttributes, int physicalAttributes, int techAttributes) {
+        super(level, rangedAttributes, magicAttributes, shadowAttributes, physicalAttributes, techAttributes);
     }
 
     public FightGame.ItemType getItemType(){

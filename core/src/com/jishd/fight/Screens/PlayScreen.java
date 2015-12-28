@@ -52,7 +52,7 @@ public class PlayScreen implements Screen {
         this.game = game;
         
         //This may need to go to game instead, as sprites will also be used in the menu screens etc, maybe have 2 diff spritesheets?
-        atlas = new TextureAtlas("FightGame.pack");
+        atlas = new TextureAtlas("FightGame.atlas");
 
         //Camera fitting
         gamecam = new OrthographicCamera();
@@ -72,7 +72,7 @@ public class PlayScreen implements Screen {
         gamecam.position.set(gamePort.getWorldWidth() / 2, gamePort.getWorldHeight() / 2, 0);
 
         //more box2d stuff (collisions), also set gravity to 10m/s
-        world = new World(new Vector2(0, -10), true);
+        world = new World(new Vector2(0, -9.813f), true);
         b2dr = new Box2DDebugRenderer();
 
         //Combines box 2 with the map I think
@@ -83,7 +83,7 @@ public class PlayScreen implements Screen {
         models = new ArrayList<MercenaryModel>();
         for (Player player : game.getPlayerList()) {
             //Setting 100, 100 as spawnpoint for now
-            models.add(new MercenaryModel(this, player.getCurrentMercenary(), 100, 100));
+            models.add(new MercenaryModel(this, player.getCurrentMercenary(), 500, 500));
         }
         projectiles = new ArrayList<Projectile>();
 
@@ -144,12 +144,12 @@ public class PlayScreen implements Screen {
                 model.getMercenaryBody().applyLinearImpulse(new Vector2(0, 8f), model.getMercenaryBody().getWorldCenter(), true);
             }
             //Left
-            if (Gdx.input.isKeyPressed(model.getMercenary().getPlayer().controls[1]) && model.getMercenaryBody().getLinearVelocity().x >= -10) {
-                model.getMercenaryBody().applyLinearImpulse(new Vector2(-10, 0), model.getMercenaryBody().getWorldCenter(), true);
+            if (Gdx.input.isKeyPressed(model.getMercenary().getPlayer().controls[1]) && model.getMercenaryBody().getLinearVelocity().x >= -3) {
+                model.getMercenaryBody().applyLinearImpulse(new Vector2(-3f, 0), model.getMercenaryBody().getWorldCenter(), true);
             }
             //Right
-            if (Gdx.input.isKeyPressed(model.getMercenary().getPlayer().controls[2]) && model.getMercenaryBody().getLinearVelocity().x <= 10) {
-                model.getMercenaryBody().applyLinearImpulse(new Vector2(10, 0), model.getMercenaryBody().getWorldCenter(), true);
+            if (Gdx.input.isKeyPressed(model.getMercenary().getPlayer().controls[2]) && model.getMercenaryBody().getLinearVelocity().x <= 3) {
+                model.getMercenaryBody().applyLinearImpulse(new Vector2(3f, 0), model.getMercenaryBody().getWorldCenter(), true);
             }
             //Shoot
             if (Gdx.input.isKeyJustPressed(model.getMercenary().getPlayer().controls[4])) {

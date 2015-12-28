@@ -13,10 +13,10 @@ public class Ranger extends Mercenary {
     }
 
     public void addAndEquipStarterItems() {
-        Item starterItem1 = new StarterBow(5, 0, 0, 0, 0);
+        Item starterItem1 = new StarterBow(1, 5, 0, 0, 0, 0);
         player.getInventory().addItem(starterItem1);
         loadout.equip(starterItem1, FightGame.SLOT.weapon1Slot);
-        Item starterItem2 = new StarterArrow(5, 0, 0, 0, 0);
+        Item starterItem2 = new StarterArrow(1, 5, 0, 0, 0, 0);
         player.getInventory().addItem(starterItem2);
         loadout.equip(starterItem2, FightGame.SLOT.ammoSlot);
     }

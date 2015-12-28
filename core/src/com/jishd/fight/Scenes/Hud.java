@@ -44,8 +44,8 @@ public class Hud implements Disposable {
 
         for (MercenaryModel model : cm) {
             players.add(new Label(model.getMercenary().toString(), new Label.LabelStyle(new BitmapFont(), Color.WHITE)));
-            healths.add(new Label(String.format("%05d", model.getCurrentHealth()), new Label.LabelStyle(new BitmapFont(), Color.RED)));
-            manas.add(new Label(String.format("%05d", model.getCurrentMana()), new Label.LabelStyle(new BitmapFont(), Color.CYAN)));
+            healths.add(new Label(String.format("%5d", model.getCurrentHealth()), new Label.LabelStyle(new BitmapFont(), Color.RED)));
+            manas.add(new Label(String.format("%5d", model.getCurrentMana()), new Label.LabelStyle(new BitmapFont(), Color.CYAN)));
         }
 
         for (Label label : players) {
