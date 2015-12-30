@@ -8,7 +8,9 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -19,6 +21,7 @@ import com.jishd.fight.Scenes.Hud;
 import com.jishd.fight.Sprites.Classes.MercenaryModel;
 import com.jishd.fight.Sprites.Items.Projectile;
 import com.jishd.fight.Tools.B2WorldCreator;
+import com.jishd.fight.Tools.DamageOnHitGenerator;
 import com.jishd.fight.Tools.WorldContactListener;
 
 import java.util.ArrayList;
@@ -28,8 +31,8 @@ public class PlayScreen implements Screen {
     private TextureAtlas atlas;
 
     //Camera stuff, orthographic camera is the camera, viewport is the "fit" of the camera, hud is a separate layer on top
-    private OrthographicCamera gamecam;
-    private Viewport gamePort;
+    private OrthographicCamera gamecam, textcam;
+    private Viewport gamePort, textPort;
     private Hud hud;
 
     //Tiled Map Stuff, loads the first map
@@ -46,7 +49,6 @@ public class PlayScreen implements Screen {
 
     //All projectiles on this map
     private ArrayList<Projectile> projectiles;
-
     
     //May need to also send an array of players entering in the game, if some dont want to play
     public PlayScreen(FightGame game, FightGame.Stages stage) {
@@ -88,7 +90,8 @@ public class PlayScreen implements Screen {
         }
         projectiles = new ArrayList<Projectile>();
 
-       // hud = new Hud(game.batch, models);
+        //hud = new Hud(game.batch, models);
+
     }
 
     public TextureAtlas getAtlas() {
@@ -105,7 +108,7 @@ public class PlayScreen implements Screen {
         update(delta);
 
         //Clear game screen with black
-        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClearColor(0, 0, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         //render game map
@@ -118,19 +121,29 @@ public class PlayScreen implements Screen {
         game.batch.setProjectionMatrix(gamecam.combined);
 
         game.batch.begin();
-        for (MercenaryModel model : models) {
-            model.draw(game.batch);
-        }
-        for (Projectile projectile : projectiles) {
-            projectile.draw(game.batch);
+            for (MercenaryModel model : models) {
+                model.draw(game.batch);
+            }
+            for (Projectile projectile : projectiles) {
+                projectile.draw(game.batch);
 
+            }
+
+        Matrix4 matrix = game.batch.getProjectionMatrix().cpy(); // cpy() needed to properly set afterwards because calling set() seems to modify kept matrix, not replaces it
+        game.batch.setProjectionMatrix(matrix.setToScaling(new Vector3(matrix.getScaleX() / FightGame.PPM, matrix.getScaleY() / FightGame.PPM, 1)));
+
+        for (MercenaryModel model : models) {
+            for(DamageOnHitGenerator damageOnHitGenerator : model.getDamageOnHitGeneratorArray()) {
+                if (damageOnHitGenerator.getLifeTimer() > 0) {
+                    damageOnHitGenerator.draw(game.batch);
+                }
+            }
         }
-        //Set batch to draw hud camera
 
         game.batch.end();
-        //game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
+        //Set batch to draw hud camera
+       // game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
        // hud.stage.draw();
-
     }
 
     @Override

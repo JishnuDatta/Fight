@@ -12,10 +12,12 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Array;
 import com.jishd.fight.FightGame;
 import com.jishd.fight.Mercenaries.Mercenary;
 import com.jishd.fight.Screens.PlayScreen;
 import com.jishd.fight.Sprites.Items.Projectile;
+import com.jishd.fight.Tools.DamageOnHitGenerator;
 import com.jishd.fight.Tools.HealthAndManaBarCreator;
 
 public class MercenaryModel extends Sprite {
@@ -44,6 +46,7 @@ public class MercenaryModel extends Sprite {
     private Body mercenaryBody;
 
     private HealthAndManaBarCreator healthAndManaBarCreator;
+    private Array<DamageOnHitGenerator> damageOnHitGeneratorArray;
 
     public MercenaryModel(PlayScreen playScreen, Mercenary mercenary, int spawnPointX, int spawnPointY){
         this.mercenary = mercenary;
@@ -65,6 +68,7 @@ public class MercenaryModel extends Sprite {
         stateTimer = 0;
 
         healthAndManaBarCreator = new HealthAndManaBarCreator(this);
+        damageOnHitGeneratorArray = new Array<DamageOnHitGenerator>();
 
         //Setting up Run
         // Array<TextureRegion> frames = new Array<TextureRegion>();
@@ -143,6 +147,9 @@ public class MercenaryModel extends Sprite {
             setPosition(mercenaryBody.getPosition().x - getWidth() / 2, mercenaryBody.getPosition().y - getWidth() / 2);
             setRegion(getFrame(dt));
             healthAndManaBarCreator.update();
+            for(DamageOnHitGenerator damageOnHitGenerator: damageOnHitGeneratorArray){
+                damageOnHitGenerator.update(dt);
+            }
         }
     }
 
@@ -226,6 +233,8 @@ public class MercenaryModel extends Sprite {
             currentHealth -= p.getDamage();
             p.destroy(false);
         }
+        damageOnHitGeneratorArray.add(new DamageOnHitGenerator(this, p.getDamage()));
+        System.out.println("added new " + this + " " + p.getDamage());
     }
 
     public Mercenary getMercenary() {
@@ -264,6 +273,7 @@ public class MercenaryModel extends Sprite {
         }
     }
 
-
-
+    public Array<DamageOnHitGenerator> getDamageOnHitGeneratorArray() {
+        return damageOnHitGeneratorArray;
+    }
 }
