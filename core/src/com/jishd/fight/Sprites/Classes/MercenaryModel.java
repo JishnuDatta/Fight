@@ -147,9 +147,10 @@ public class MercenaryModel extends Sprite {
             setPosition(mercenaryBody.getPosition().x - getWidth() / 2, mercenaryBody.getPosition().y - getWidth() / 2);
             setRegion(getFrame(dt));
             healthAndManaBarCreator.update();
-            for(DamageOnHitGenerator damageOnHitGenerator: damageOnHitGeneratorArray){
-                damageOnHitGenerator.update(dt);
-            }
+
+        }
+        for(DamageOnHitGenerator damageOnHitGenerator: damageOnHitGeneratorArray){
+            damageOnHitGenerator.update(dt);
         }
     }
 

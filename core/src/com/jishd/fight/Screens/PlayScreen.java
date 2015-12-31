@@ -134,10 +134,9 @@ public class PlayScreen implements Screen {
 
         for (MercenaryModel model : models) {
             for(DamageOnHitGenerator damageOnHitGenerator : model.getDamageOnHitGeneratorArray()) {
-                if (damageOnHitGenerator.getLifeTimer() > 0) {
-                    damageOnHitGenerator.draw(game.batch);
-                }
+                damageOnHitGenerator.draw(game.batch);
             }
+
         }
 
         game.batch.end();
