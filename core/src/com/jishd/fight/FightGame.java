@@ -42,16 +42,19 @@ public class FightGame extends Game {
     private Screen currentScreen;
 
     public enum Mercenaries {RANGER, WIZARD, ASSASSIN, KNIGHT, TECH, HUMAN}
-    public enum SLOT {weapon1Slot, weapon2Slot, misc1Slot, misc2Slot, runeSlot, ammoSlot, headSlot, chestSlot, legSlot, footSlot}
+    public enum DamageForms{Ranged, Magic, Shadow, Physical, Tech, None}
+    public enum SLOT {weapon1Slot, weapon2Slot, misc1Slot, misc2Slot, misc3Slot, misc4Slot, headSlot, chestSlot, legSlot, footSlot}
     public enum ItemType{WEAPON, MISC, RUNE, AMMO, HEAD, CHEST, LEG, FOOT}
     public enum Controls {UP, LEFT, RIGHT, DOWN, JUMP, WEAPON1, WEAPON2, SPELL, MISC1, MISC2}
     public enum MercenaryInGameState {STANDING, RUNNING, JUMPING, FALLING}
-    public enum WeaponDamageType{SelfReliant, Specialist, Dualist, Default, Confused, Random, AllRounder, HeadHunter, LegBreaker, ChestCarver, BackStabber, Comboer, Diversified}//Used for damage calculation
+    public enum WeaponDamageType{Boring, SelfReliant, Specialist, Dualist, Skilled, Confused, Random, AllRounder, HeadHunter, LegBreaker, ChestCarver, BackStabber, Comboer, Diversified}//Used for damage calculation
+
     //Showing maximum ranges for these weapons:
+    //Boring gives base 100 (certain special damage) and 100% of (certain attribue affinity) points as damage.
     //Self-reliant, gives 200% on highest attribute it provides.
     //Specialist, gives 500% of a certain stat, if the mercenary only has stats in that category
     //Dualist, gives 100% on top two stats of the mercenary
-    //Default, gives 200% on top stat mercenary has.
+    //Skilled, gives 200% on top stat mercenary has.
     //Confused, gives 300% on smallest stat mercenary has
     //Random, gives 400% on a random stat every hit.
     //All rounder, gives 100% on all stats.
@@ -63,6 +66,7 @@ public class FightGame extends Game {
     //Diversity, give 300% split evenly between each attribute it gives.
     //Jujutsu, does damage 300% based on enemies max attribute.
     //more to come
+    public enum Effect{NONE}
     public enum Stages{STAGE1}
 
     //Appears to be the main function of the class

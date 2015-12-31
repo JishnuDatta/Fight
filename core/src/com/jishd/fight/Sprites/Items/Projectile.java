@@ -23,6 +23,8 @@ public class Projectile extends Sprite {
     private Mercenary mercenary;
     private Body mercenaryBody;
 
+    private Item item;
+
     private boolean killProjectile;
     private boolean deadProjectile;
     private boolean hitEnvironment;
@@ -42,6 +44,8 @@ public class Projectile extends Sprite {
         world = playScreen.getWorld();
         this.mercenary = mercenary;
         this.mercenaryBody = mercenaryBody;
+
+        this.item = item;
         
         killProjectile = false;
         deadProjectile = false;
@@ -95,7 +99,7 @@ public class Projectile extends Sprite {
         shape.setPosition(new Vector2(projDirRight ? -5 / FightGame.PPM : 5 / FightGame.PPM, 0));
 
         fixtureDef.shape = shape;
-
+        fixtureDef.isSensor = true;
         fixtureDef.filter.categoryBits = FightGame.PROJECTILE_BIT;
         arrowBody.createFixture(fixtureDef).setUserData(this);
     }
@@ -121,5 +125,9 @@ public class Projectile extends Sprite {
 
     public Mercenary getMercenary() {
         return mercenary;
+    }
+
+    public Item getItem(){
+        return item;
     }
 }

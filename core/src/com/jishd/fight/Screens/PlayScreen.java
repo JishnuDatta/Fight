@@ -104,8 +104,8 @@ public class PlayScreen implements Screen {
     }
 
     @Override
-    public void render(float delta) {
-        update(delta);
+    public void render(float dt) {
+        update(dt);
 
         //Clear game screen with black
         Gdx.gl.glClearColor(0, 0, 1, 1);
@@ -138,7 +138,6 @@ public class PlayScreen implements Screen {
             }
 
         }
-
         game.batch.end();
         //Set batch to draw hud camera
        // game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
@@ -159,6 +158,7 @@ public class PlayScreen implements Screen {
     public void update(float dt) {
         handleInput(dt);
         world.step(1 / 60f, 6, 2);
+
 
         for (MercenaryModel model : models) {
             model.update(dt);
@@ -204,6 +204,8 @@ public class PlayScreen implements Screen {
     public ArrayList<Projectile> getProjectiles() {
         return projectiles;
     }
+
+
 
 
 }

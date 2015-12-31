@@ -17,6 +17,7 @@ import com.jishd.fight.FightGame;
 import com.jishd.fight.Mercenaries.Mercenary;
 import com.jishd.fight.Screens.PlayScreen;
 import com.jishd.fight.Sprites.Items.Projectile;
+import com.jishd.fight.Tools.DamageCalculator;
 import com.jishd.fight.Tools.DamageOnHitGenerator;
 import com.jishd.fight.Tools.HealthAndManaBarCreator;
 
@@ -225,17 +226,15 @@ public class MercenaryModel extends Sprite {
 
     public void calculateDamage(Mercenary mercenary, Projectile p, String s) {
         if (s.equals("head")) {
-            System.out.println("headshot!");
             currentHealth -= p.getDamage();
             p.destroy(false);
 
         } else if (s.equals("body")) {
-            System.out.println("bodyshot!");
             currentHealth -= p.getDamage();
             p.destroy(false);
         }
-        damageOnHitGeneratorArray.add(new DamageOnHitGenerator(this, p.getDamage()));
-        System.out.println("added new " + this + " " + p.getDamage());
+        DamageCalculator dCalc = new DamageCalculator();
+        damageOnHitGeneratorArray.add(new DamageOnHitGenerator(this, dCalc.calcDamage(this.getMercenary(), mercenary, p.getItem(), s)));
     }
 
     public Mercenary getMercenary() {

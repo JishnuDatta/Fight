@@ -95,9 +95,12 @@ public class Stats {
     }
 
     public void addAttributePoint() {
+        rangedDamage++;
+        techDamage++;
+        magicDamage++;
+        physicalDamage++;
+        shadowDamage++;
     }
-
-
 
     public int getRangedDamage() {
         return rangedDamage;

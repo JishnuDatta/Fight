@@ -6,7 +6,7 @@ import com.jishd.fight.Mercenaries.Mercenary;
 
 public class Loadout {
 
-    private Item weapon1, weapon2, misc1, misc2, rune, ammo, head, chest, leg, foot;
+    private Item weapon1, weapon2, misc1, misc2, misc3, misc4, head, chest, leg, foot;
     private Mercenary mercenary;
 
     //Ranged attributes
@@ -28,8 +28,8 @@ public class Loadout {
         weapon2 = null;
         misc1 = null;
         misc2 = null;
-        rune = null;
-        ammo = null;
+        misc3 = null;
+        misc4 = null;
         head = null;
         chest = null;
         leg = null;
@@ -47,10 +47,10 @@ public class Loadout {
             misc1 = item;
         } else if (slot == FightGame.SLOT.misc2Slot) {
             misc2 = item;
-        } else if (slot == FightGame.SLOT.runeSlot) {
-            rune = item;
-        } else if (slot == FightGame.SLOT.ammoSlot) {
-            ammo = item;
+        } else if (slot == FightGame.SLOT.misc3Slot) {
+            misc3 = item;
+        } else if (slot == FightGame.SLOT.misc4Slot) {
+            misc4 = item;
         } else if (slot == FightGame.SLOT.headSlot) {
             head = item;
         } else if (slot == FightGame.SLOT.chestSlot) {
@@ -80,11 +80,11 @@ public class Loadout {
     }
 
     public Item getRune() {
-        return rune;
+        return misc3;
     }
 
     public Item getAmmo() {
-        return ammo;
+        return misc4;
     }
 
     public Item getHead() {

@@ -6,6 +6,7 @@ import com.jishd.fight.FightGame;
 import com.jishd.fight.PlayerData.Loadout;
 import com.jishd.fight.PlayerData.Player;
 import com.jishd.fight.PlayerData.Stats;
+import com.jishd.fight.Tools.Damage;
 
 public abstract class Mercenary {
     //Should i make this public??
@@ -41,8 +42,12 @@ public abstract class Mercenary {
         return new TextureRegion(atlas.findRegion("Archer"), 0, 0, 32, 72);
     }
 
+    public Damage getBaseDamage(){
+        return new Damage(getRangedDamage(), getMagicDamage(), getShadowDamage(), getPhysicalDamage(), getTechDamage());
+    }
+
     public float getRangedDamage() {
-        return stats.getRangedDamage() + loadout.getRangedDamage() + 30;
+        return stats.getRangedDamage() + loadout.getRangedDamage();
     }
 
     public float getHeadshotDamage() {

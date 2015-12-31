@@ -1,9 +1,13 @@
 package com.jishd.fight.Items;
 
 import com.jishd.fight.FightGame;
+import com.jishd.fight.Tools.Damage;
 
 public abstract class Item {
     private int rangedAttributes, magicAttributes, shadowAttributes, physicalAttributes, techAttributes, totalAttributes;
+
+    private FightGame.WeaponDamageType damageType;
+    private FightGame.Effect effect;
     //Number of different attributes the item provides
     private int diversity;
 
@@ -12,13 +16,17 @@ public abstract class Item {
     //Level needed to equip item (also gives indication of the power of the item)
     private int level;
 
-    public Item(int level, int rangedAttributes, int magicAttributes, int shadowAttributes, int physicalAttributes, int techAttributes) {
+    //Can turn this into an array of effects later on.
+    public Item(int level, int rangedAttributes, int magicAttributes, int shadowAttributes, int physicalAttributes, int techAttributes, FightGame.WeaponDamageType damageType, FightGame.Effect effect) {
         this.level = level;
         this.rangedAttributes = rangedAttributes;
         this.magicAttributes = magicAttributes;
         this.shadowAttributes = shadowAttributes;
         this.physicalAttributes = physicalAttributes;
         this.techAttributes = techAttributes;
+
+        this.damageType = damageType;
+        this.effect = effect;
 
         totalAttributes = rangedAttributes + magicAttributes + shadowAttributes + physicalAttributes + techAttributes;
         getDiversity();
@@ -135,9 +143,30 @@ private void getDiversityDescription(){
         return diversityDescription + " " + tier + " ";
     }
 
-     public abstract FightGame.ItemType getItemType();
+    public abstract FightGame.ItemType getItemType();
+
+    public abstract FightGame.DamageForms getItemAffinity();
 
     public int getLevel(){
         return level;
+    }
+
+    public Damage getDamage(){
+        Damage damageToBeReturned = new Damage(0,0,0,0,0);
+        switch(damageType){
+            case Boring: // 30 Affinity Damage + 100% * Mercenary Affinity Attributes
+                if(getItemAffinity() == FightGame.DamageForms.Ranged){
+                    float damageBoring = 30 + rangedAttributes;
+                    damageToBeReturned.rangedDamage += damageBoring;
+                }
+                else if(getItemAffinity() == FightGame.DamageForms.Shadow){
+                    float damageBoring = 30 + shadowAttributes;
+                    damageToBeReturned.shadowDamage += damageBoring;
+                }
+                break;
+            default:
+                break;
+        }
+        return damageToBeReturned;
     }
 }
