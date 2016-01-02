@@ -3,7 +3,7 @@ package com.jishd.fight.Items.Weapons;
 import com.jishd.fight.FightGame;
 import com.jishd.fight.Items.Item;
 
-//List of bows to be added, lazer bow(arrows fire without gravity, instantly??), ghost bow (arrows fire thru wall)
+//List of bows to be added, laser bow(arrows fire without gravity, instantly??), ghost bow (arrows fire thru wall)
 
 public class Bow extends Item {
 
@@ -23,6 +23,10 @@ public class Bow extends Item {
     @Override
     public String getCombinedName() {
         return super.getCombinedName() + "Bow";
+    }
+
+    public FightGame.Weapons getWeaponType(){
+        return FightGame.Weapons.Bow;
     }
 
 

@@ -16,8 +16,9 @@ import com.badlogic.gdx.utils.Array;
 import com.jishd.fight.FightGame;
 import com.jishd.fight.Mercenaries.Mercenary;
 import com.jishd.fight.Screens.PlayScreen;
+import com.jishd.fight.Sprites.Items.DaggerAttack;
 import com.jishd.fight.Sprites.Items.Projectile;
-import com.jishd.fight.Tools.DamageCalculator;
+import com.jishd.fight.Tools.Damage;
 import com.jishd.fight.Tools.DamageOnHitGenerator;
 import com.jishd.fight.Tools.HealthAndManaBarCreator;
 
@@ -48,6 +49,7 @@ public class MercenaryModel extends Sprite {
 
     private HealthAndManaBarCreator healthAndManaBarCreator;
     private Array<DamageOnHitGenerator> damageOnHitGeneratorArray;
+
 
     public MercenaryModel(PlayScreen playScreen, Mercenary mercenary, int spawnPointX, int spawnPointY){
         this.mercenary = mercenary;
@@ -219,8 +221,13 @@ public class MercenaryModel extends Sprite {
         }
         //Shoot
         if (Gdx.input.isKeyJustPressed( mercenary.getPlayer().controls[4])) {
+            if(mercenary.getLoadout().getWeapon1().getWeaponType() == FightGame.Weapons.Bow) {
                 Projectile projectile = new Projectile(playScreen, mercenaryBody, mercenary, mercenary.getLoadout().getWeapon1(), charDirRight ? 0 : 180);
-                 playScreen.getProjectiles().add(projectile);
+                playScreen.getProjectiles().add(projectile);
+            }
+            else if(mercenary.getLoadout().getWeapon1().getWeaponType() == FightGame.Weapons.Dagger){
+                DaggerAttack daggerAttack = new DaggerAttack(playScreen, mercenaryBody, mercenary, mercenary.getLoadout().getWeapon1(), charDirRight ? 0 : 180);
+            }
         }
     }
 
@@ -233,9 +240,11 @@ public class MercenaryModel extends Sprite {
             currentHealth -= p.getDamage();
             p.destroy(false);
         }
-        DamageCalculator dCalc = new DamageCalculator();
-        damageOnHitGeneratorArray.add(new DamageOnHitGenerator(this, dCalc.calcDamage(this.getMercenary(), mercenary, p.getItem(), s)));
-    }
+        Damage damageHit =  playScreen.getdCalc().calcDamage(this.getMercenary(), mercenary, p.getItem(), s);
+        damageOnHitGeneratorArray.add(new DamageOnHitGenerator(this,damageHit));
+
+        currentHealth -= damageHit.getTotalDamage();
+     }
 
     public Mercenary getMercenary() {
         return mercenary;

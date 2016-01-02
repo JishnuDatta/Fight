@@ -1,7 +1,6 @@
 package com.jishd.fight;
 
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -47,6 +46,7 @@ public class FightGame extends Game {
     public enum ItemType{WEAPON, MISC, RUNE, AMMO, HEAD, CHEST, LEG, FOOT}
     public enum Controls {UP, LEFT, RIGHT, DOWN, JUMP, WEAPON1, WEAPON2, SPELL, MISC1, MISC2}
     public enum MercenaryInGameState {STANDING, RUNNING, JUMPING, FALLING}
+    public enum Weapons{Bow, Dagger}
     public enum WeaponDamageType{Boring, SelfReliant, Specialist, Dualist, Skilled, Confused, Random, AllRounder, HeadHunter, LegBreaker, ChestCarver, BackStabber, Comboer, Diversified}//Used for damage calculation
 
     //Showing maximum ranges for these weapons:
@@ -72,14 +72,18 @@ public class FightGame extends Game {
     //Appears to be the main function of the class
     @Override
     public void create() {
-        Gdx.graphics.setDisplayMode(Gdx.graphics.getDesktopDisplayMode().width, Gdx.graphics.getDesktopDisplayMode().height,true);
+      //  Gdx.graphics.setDisplayMode(Gdx.graphics.getDesktopDisplayMode().width, Gdx.graphics.getDesktopDisplayMode().height,true);
         //Add as many players as who join in //this can be done later, for now hardcoded as 4 players
         playerList = new ArrayList<Player>();
         for (int i = 0; i < 4; i++) {
             playerList.add(new Player(this, "Player " + Integer.toString(i)));
             //Their current mercenaries are humans, so I am adding and setting new rangers for them
-            playerList.get(i).buyMercenary(Mercenaries.RANGER);
+
         }
+        playerList.get(0).buyMercenary(Mercenaries.RANGER);
+        playerList.get(1).buyMercenary(Mercenaries.RANGER);
+        playerList.get(2).buyMercenary(Mercenaries.RANGER);
+        playerList.get(3).buyMercenary(Mercenaries.RANGER);
         //Hardcoding control values, also find out why printscreen is causing other players to act
         playerList.get(0).controls[0] = Input.Keys.UP;
         playerList.get(0).controls[1] = Input.Keys.LEFT;

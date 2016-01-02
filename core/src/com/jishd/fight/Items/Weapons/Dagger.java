@@ -17,4 +17,13 @@ public class Dagger extends Item {
     public FightGame.DamageForms getItemAffinity() {
         return FightGame.DamageForms.Shadow;
     }
+
+    @Override
+    public String getCombinedName() {
+        return super.getCombinedName() + "Dagger";
+    }
+
+    public FightGame.Weapons getWeaponType(){
+        return FightGame.Weapons.Dagger;
+    }
 }

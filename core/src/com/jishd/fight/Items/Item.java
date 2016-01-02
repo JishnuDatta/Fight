@@ -169,4 +169,7 @@ private void getDiversityDescription(){
         }
         return damageToBeReturned;
     }
+
+    public abstract FightGame.Weapons getWeaponType();
+
 }

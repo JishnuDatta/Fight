@@ -13,14 +13,17 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.jishd.fight.FightGame;
 import com.jishd.fight.PlayerData.Player;
 import com.jishd.fight.Scenes.Hud;
 import com.jishd.fight.Sprites.Classes.MercenaryModel;
+import com.jishd.fight.Sprites.Entity;
 import com.jishd.fight.Sprites.Items.Projectile;
 import com.jishd.fight.Tools.B2WorldCreator;
+import com.jishd.fight.Tools.DamageCalculator;
 import com.jishd.fight.Tools.DamageOnHitGenerator;
 import com.jishd.fight.Tools.WorldContactListener;
 
@@ -45,10 +48,16 @@ public class PlayScreen implements Screen {
     private Box2DDebugRenderer b2dr;
 
     //Storing all the mercenary models on this level
+    private Array<Entity> entities;
+
+    //Storing all the mercenary models on this level
     private ArrayList<MercenaryModel> models;
 
     //All projectiles on this map
     private ArrayList<Projectile> projectiles;
+
+    //New DamageCalculator
+    DamageCalculator dCalc;
     
     //May need to also send an array of players entering in the game, if some dont want to play
     public PlayScreen(FightGame game, FightGame.Stages stage) {
@@ -82,13 +91,23 @@ public class PlayScreen implements Screen {
         new B2WorldCreator(world, map);
         world.setContactListener(new WorldContactListener());
 
+//        //Entity conversion
+//        entities = new Array<Entity>();
+//        //Convert this to gui stuff after done - pass through an array if players (so not all players are chosen)
+//        for(Player player: game.getPlayerList()){
+//           // entities.add();
+//        }
+
+
         //Create the new Mercenary models for this level, and spawn them in
         models = new ArrayList<MercenaryModel>();
         for (Player player : game.getPlayerList()) {
             //Setting 100, 100 as spawnpoint for now
-            models.add(new MercenaryModel(this, player.getCurrentMercenary(), 500, 500));
+            models.add(new MercenaryModel(this, player.getCurrentMercenary(), 300, 500));
         }
         projectiles = new ArrayList<Projectile>();
+
+        dCalc = new DamageCalculator();
 
         //hud = new Hud(game.batch, models);
 
@@ -108,7 +127,7 @@ public class PlayScreen implements Screen {
         update(dt);
 
         //Clear game screen with black
-        Gdx.gl.glClearColor(0, 0, 1, 1);
+        Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         //render game map
@@ -121,6 +140,10 @@ public class PlayScreen implements Screen {
         game.batch.setProjectionMatrix(gamecam.combined);
 
         game.batch.begin();
+//            for(Entity entity: entities){
+//                entity.draw(game.batch);
+//            }
+
             for (MercenaryModel model : models) {
                 model.draw(game.batch);
             }
@@ -151,7 +174,7 @@ public class PlayScreen implements Screen {
 
     public void handleInput(float dt) {
         for (MercenaryModel model : models) {
-            model.handleInput();
+              model.handleInput();
         }
     }
 
@@ -159,6 +182,9 @@ public class PlayScreen implements Screen {
         handleInput(dt);
         world.step(1 / 60f, 6, 2);
 
+//for(Entity entity: entities){
+//    entity.update(dt);
+//}
 
         for (MercenaryModel model : models) {
             model.update(dt);
@@ -205,7 +231,11 @@ public class PlayScreen implements Screen {
         return projectiles;
     }
 
+    public void addEntity(Entity entity){
+        entities.add(entity);
+    }
 
-
-
+    public DamageCalculator getdCalc() {
+        return dCalc;
+    }
 }

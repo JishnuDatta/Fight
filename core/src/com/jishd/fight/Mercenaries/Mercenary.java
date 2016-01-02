@@ -39,7 +39,7 @@ public abstract class Mercenary {
 
     //Just a placeholder for when I create real sprites, convert this to abstract afterwards
     public TextureRegion getTextureRegion(TextureAtlas atlas){
-        return new TextureRegion(atlas.findRegion("Archer"), 0, 0, 32, 72);
+        return new TextureRegion(atlas.findRegion("Human"), 0, 0, 32, 72);
     }
 
     public Damage getBaseDamage(){

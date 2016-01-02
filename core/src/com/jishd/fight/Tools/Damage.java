@@ -9,4 +9,8 @@ public class Damage {
         this.physicalDamage = physicalDamage;
         this.techDamage = techDamage;
     }
+
+    public int getTotalDamage(){
+        return (int) (rangedDamage + magicDamage + shadowDamage + physicalDamage + techDamage);
+    }
 }
