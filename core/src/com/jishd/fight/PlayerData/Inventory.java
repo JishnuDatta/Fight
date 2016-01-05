@@ -21,15 +21,15 @@ public class Inventory {
 
     public Inventory(Player player) {
         this.player = player;
-        allItems = new  ArrayList<Item>();
-        weaponItems = new  ArrayList<Item>();
-        miscItems = new  ArrayList<Item>();
-        runeItems = new  ArrayList<Item>();
-        ammoItems = new  ArrayList<Item>();
-        headItems = new  ArrayList<Item>();
-        chestItems = new  ArrayList<Item>();
-        legItems = new  ArrayList<Item>();
-        footItems = new  ArrayList<Item>();
+        allItems = new ArrayList<Item>();
+        weaponItems = new ArrayList<Item>();
+        miscItems = new ArrayList<Item>();
+        runeItems = new ArrayList<Item>();
+        ammoItems = new ArrayList<Item>();
+        headItems = new ArrayList<Item>();
+        chestItems = new ArrayList<Item>();
+        legItems = new ArrayList<Item>();
+        footItems = new ArrayList<Item>();
     }
 
     public void addItem(Item item) {
@@ -41,7 +41,7 @@ public class Inventory {
         } else if (item.getItemType() == FightGame.ItemType.RUNE) {
             runeItems.add(item);
         } else if (item.getItemType() == FightGame.ItemType.AMMO) {
-           ammoItems.add(item);
+            ammoItems.add(item);
         } else if (item.getItemType() == FightGame.ItemType.HEAD) {
             headItems.add(item);
         } else if (item.getItemType() == FightGame.ItemType.CHEST) {

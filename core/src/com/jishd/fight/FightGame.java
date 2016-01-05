@@ -41,13 +41,20 @@ public class FightGame extends Game {
     private Screen currentScreen;
 
     public enum Mercenaries {RANGER, WIZARD, ASSASSIN, KNIGHT, TECH, HUMAN}
-    public enum DamageForms{Ranged, Magic, Shadow, Physical, Tech, None}
+
+    public enum DamageForms {Ranged, Magic, Shadow, Physical, Tech, None}
+
     public enum SLOT {weapon1Slot, weapon2Slot, misc1Slot, misc2Slot, misc3Slot, misc4Slot, headSlot, chestSlot, legSlot, footSlot}
-    public enum ItemType{WEAPON, MISC, RUNE, AMMO, HEAD, CHEST, LEG, FOOT}
+
+    public enum ItemType {WEAPON, MISC, RUNE, AMMO, HEAD, CHEST, LEG, FOOT}
+
     public enum Controls {UP, LEFT, RIGHT, DOWN, JUMP, WEAPON1, WEAPON2, SPELL, MISC1, MISC2}
+
     public enum MercenaryInGameState {STANDING, RUNNING, JUMPING, FALLING}
-    public enum Weapons{Bow, Dagger}
-    public enum WeaponDamageType{Boring, SelfReliant, Specialist, Dualist, Skilled, Confused, Random, AllRounder, HeadHunter, LegBreaker, ChestCarver, BackStabber, Comboer, Diversified}//Used for damage calculation
+
+    public enum Weapons {Bow, Dagger}
+
+    public enum WeaponDamageType {Boring, SelfReliant, Specialist, Dualist, Skilled, Confused, Random, AllRounder, HeadHunter, LegBreaker, ChestCarver, BackStabber, Comboer, Diversified}//Used for damage calculation
 
     //Showing maximum ranges for these weapons:
     //Boring gives base 100 (certain special damage) and 100% of (certain attribue affinity) points as damage.
@@ -66,13 +73,16 @@ public class FightGame extends Game {
     //Diversity, give 300% split evenly between each attribute it gives.
     //Jujutsu, does damage 300% based on enemies max attribute.
     //more to come
-    public enum Effect{NONE}
-    public enum Stages{STAGE1}
+    public enum Effect {
+        NONE
+    }
+
+    public enum Stages {STAGE1}
 
     //Appears to be the main function of the class
     @Override
     public void create() {
-      //  Gdx.graphics.setDisplayMode(Gdx.graphics.getDesktopDisplayMode().width, Gdx.graphics.getDesktopDisplayMode().height,true);
+        //  Gdx.graphics.setDisplayMode(Gdx.graphics.getDesktopDisplayMode().width, Gdx.graphics.getDesktopDisplayMode().height,true);
         //Add as many players as who join in //this can be done later, for now hardcoded as 4 players
         playerList = new ArrayList<Player>();
         for (int i = 0; i < 4; i++) {
@@ -91,7 +101,7 @@ public class FightGame extends Game {
         playerList.get(0).controls[3] = Input.Keys.DOWN;
         playerList.get(0).controls[4] = Input.Keys.SPACE;
 
-        for(int i = 1; i < 4; i++){
+        for (int i = 1; i < 4; i++) {
             playerList.get(i).controls[0] = Input.Keys.Q;
             playerList.get(i).controls[1] = Input.Keys.Q;
             playerList.get(i).controls[2] = Input.Keys.Q;

@@ -11,6 +11,7 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
@@ -21,13 +22,10 @@ import com.jishd.fight.PlayerData.Player;
 import com.jishd.fight.Scenes.Hud;
 import com.jishd.fight.Sprites.Classes.MercenaryModel;
 import com.jishd.fight.Sprites.Entity;
-import com.jishd.fight.Sprites.Items.Projectile;
 import com.jishd.fight.Tools.B2WorldCreator;
 import com.jishd.fight.Tools.DamageCalculator;
 import com.jishd.fight.Tools.DamageOnHitGenerator;
 import com.jishd.fight.Tools.WorldContactListener;
-
-import java.util.ArrayList;
 
 public class PlayScreen implements Screen {
     public FightGame game;
@@ -49,16 +47,11 @@ public class PlayScreen implements Screen {
 
     //Storing all the mercenary models on this level
     private Array<Entity> entities;
-
-    //Storing all the mercenary models on this level
-    private ArrayList<MercenaryModel> models;
-
-    //All projectiles on this map
-    private ArrayList<Projectile> projectiles;
+    private Array<Body> destroyEntities;
 
     //New DamageCalculator
     DamageCalculator dCalc;
-    
+
     //May need to also send an array of players entering in the game, if some dont want to play
     public PlayScreen(FightGame game, FightGame.Stages stage) {
         this.game = game;
@@ -71,7 +64,7 @@ public class PlayScreen implements Screen {
         gamePort = new FitViewport(FightGame.V_WIDTH / FightGame.PPM, FightGame.V_HEIGHT / FightGame.PPM, gamecam);
 
         mapLoader = new TmxMapLoader();
-        switch(stage) {
+        switch (stage) {
             case STAGE1:
                 map = mapLoader.load("Stage1.tmx");
                 break;
@@ -92,20 +85,14 @@ public class PlayScreen implements Screen {
         world.setContactListener(new WorldContactListener());
 
 //        //Entity conversion
-//        entities = new Array<Entity>();
+        entities = new Array<Entity>();
+        //Destroy Bodies List
+        destroyEntities = new Array<Body>();
+
 //        //Convert this to gui stuff after done - pass through an array if players (so not all players are chosen)
-//        for(Player player: game.getPlayerList()){
-//           // entities.add();
-//        }
-
-
-        //Create the new Mercenary models for this level, and spawn them in
-        models = new ArrayList<MercenaryModel>();
         for (Player player : game.getPlayerList()) {
-            //Setting 100, 100 as spawnpoint for now
-            models.add(new MercenaryModel(this, player.getCurrentMercenary(), 300, 500));
+            new MercenaryModel(this, 500, 500, player.getCurrentMercenary().getTextureRegion(atlas), player.getCurrentMercenary());
         }
-        projectiles = new ArrayList<Projectile>();
 
         dCalc = new DamageCalculator();
 
@@ -140,31 +127,26 @@ public class PlayScreen implements Screen {
         game.batch.setProjectionMatrix(gamecam.combined);
 
         game.batch.begin();
-//            for(Entity entity: entities){
-//                entity.draw(game.batch);
-//            }
+        for (Entity entity : entities) {
+            entity.draw(game.batch);
+        }
 
-            for (MercenaryModel model : models) {
-                model.draw(game.batch);
-            }
-            for (Projectile projectile : projectiles) {
-                projectile.draw(game.batch);
-
-            }
 
         Matrix4 matrix = game.batch.getProjectionMatrix().cpy(); // cpy() needed to properly set afterwards because calling set() seems to modify kept matrix, not replaces it
         game.batch.setProjectionMatrix(matrix.setToScaling(new Vector3(matrix.getScaleX() / FightGame.PPM, matrix.getScaleY() / FightGame.PPM, 1)));
 
-        for (MercenaryModel model : models) {
-            for(DamageOnHitGenerator damageOnHitGenerator : model.getDamageOnHitGeneratorArray()) {
-                damageOnHitGenerator.draw(game.batch);
+        for (Entity entity : entities) {
+            if (entity instanceof MercenaryModel) {
+                for (DamageOnHitGenerator damageOnHitGenerator : ((MercenaryModel) entity).getDamageOnHitGeneratorArray()) {
+                    damageOnHitGenerator.draw(game.batch);
+                }
             }
 
         }
         game.batch.end();
         //Set batch to draw hud camera
-       // game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
-       // hud.stage.draw();
+        // game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
+        // hud.stage.draw();
     }
 
     @Override
@@ -173,31 +155,38 @@ public class PlayScreen implements Screen {
     }
 
     public void handleInput(float dt) {
-        for (MercenaryModel model : models) {
-              model.handleInput();
+        for (Entity entity : entities) {
+            if (entity instanceof MercenaryModel) {
+                ((MercenaryModel) entity).handleInput();
+            }
         }
     }
 
     public void update(float dt) {
-        handleInput(dt);
         world.step(1 / 60f, 6, 2);
+        handleInput(dt);
 
-//for(Entity entity: entities){
-//    entity.update(dt);
-//}
 
-        for (MercenaryModel model : models) {
-            model.update(dt);
+        for (int i = 0; i < entities.size;) {
+            entities.get(i).update(dt);
+            if(entities.get(i).deleteEntity) {
+                destroyEntities.add(entities.get(i).getEntityBody());
+                entities.removeIndex(i);
+            }
+            i++;
         }
-
-       // hud.update();
-        for (Projectile projectile : projectiles) {
-            projectile.update(dt);
+        for(int i =0; i< destroyEntities.size; i++){
+            world.destroyBody(destroyEntities.get(i));
         }
+        destroyEntities.clear();
+
+
+        // hud.update();
         gamecam.update();
 
         renderer.setView(gamecam);
     }
+
 
     @Override
     public void pause() {
@@ -227,12 +216,8 @@ public class PlayScreen implements Screen {
         hud.dispose();
     }
 
-    public ArrayList<Projectile> getProjectiles() {
-        return projectiles;
-    }
-
-    public void addEntity(Entity entity){
-        entities.add(entity);
+    public Array<Entity> getEntities() {
+        return entities;
     }
 
     public DamageCalculator getdCalc() {

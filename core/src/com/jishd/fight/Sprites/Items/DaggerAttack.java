@@ -15,7 +15,7 @@ import com.jishd.fight.Items.Item;
 import com.jishd.fight.Mercenaries.Mercenary;
 import com.jishd.fight.Screens.PlayScreen;
 
-public class DaggerAttack extends Sprite{
+public class DaggerAttack extends Sprite {
     private PlayScreen playScreen;
     private World world;
     private Mercenary mercenary;
@@ -36,7 +36,7 @@ public class DaggerAttack extends Sprite{
 
     private float damage;
 
-    public DaggerAttack(PlayScreen playScreen, Body mercenaryBody, Mercenary mercenary, Item item, float degrees){
+    public DaggerAttack(PlayScreen playScreen, Body mercenaryBody, Mercenary mercenary, Item item, float degrees) {
         this.playScreen = playScreen;
         world = playScreen.getWorld();
         this.mercenary = mercenary;
@@ -53,7 +53,7 @@ public class DaggerAttack extends Sprite{
         previousAngle = 0;
         int arrowSpeed = 40;
 
-        projDirRight =  (degrees < 180) ? true : false;
+        projDirRight = (degrees < 180) ? true : false;
 
         setBounds(mercenaryBody.getPosition().x, mercenaryBody.getPosition().y, 30 / FightGame.PPM, 6 / FightGame.PPM);
         setOrigin(projDirRight ? getWidth() : 0, getHeight() / 2);
@@ -62,23 +62,22 @@ public class DaggerAttack extends Sprite{
 
         defineProj();
         arrowBody.setGravityScale(0);
-        arrowBody.setLinearVelocity(3,0 );
-         }
+        arrowBody.setLinearVelocity(3, 0);
+    }
 
     public void update(float dt) {
         if (killProjectile && !deadProjectile) {
             world.destroyBody(arrowBody);
             deadProjectile = true;
-        } else if(deadProjectile && hitEnvironment && deathTimer < 1){
+        } else if (deadProjectile && hitEnvironment && deathTimer < 1) {
             deathTimer += dt;
             setAlpha(1.0f - (deathTimer));
-        }
-        else if (!deadProjectile) {
+        } else if (!deadProjectile) {
 
             float angle = (float) (MathUtils.radiansToDegrees * Math.tan(arrowBody.getLinearVelocity().y / arrowBody.getLinearVelocity().x));
             rotate(angle - previousAngle);
 
-            setPosition(arrowBody.getPosition().x + (projDirRight ? - getWidth() : 0), arrowBody.getPosition().y - getHeight() / 2);
+            setPosition(arrowBody.getPosition().x + (projDirRight ? -getWidth() : 0), arrowBody.getPosition().y - getHeight() / 2);
             previousAngle = angle;
         }
     }
@@ -86,7 +85,7 @@ public class DaggerAttack extends Sprite{
     public void defineProj() {
 
         BodyDef bodyDef = new BodyDef();
-        bodyDef.position.set(projDirRight ? mercenaryBody.getPosition().x + 20/ FightGame.PPM : mercenaryBody.getPosition().x - 20/ FightGame.PPM, mercenaryBody.getPosition().y + 30/FightGame.PPM);
+        bodyDef.position.set(projDirRight ? mercenaryBody.getPosition().x + 20 / FightGame.PPM : mercenaryBody.getPosition().x - 20 / FightGame.PPM, mercenaryBody.getPosition().y + 30 / FightGame.PPM);
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         arrowBody = world.createBody(bodyDef);
         arrowBody.setBullet(true);
@@ -125,7 +124,7 @@ public class DaggerAttack extends Sprite{
         return mercenary;
     }
 
-    public Item getItem(){
+    public Item getItem() {
         return item;
     }
 }

@@ -33,12 +33,12 @@ public class Projectile extends Sprite {
     private float previousAngle;
 
     private boolean projDirRight;
-    
+
     private Body arrowBody;
 
     private float damage;
 
-//Float x and y become projectile speed
+    //Float x and y become projectile speed
     public Projectile(PlayScreen playScreen, Body mercenaryBody, Mercenary mercenary, Item item, float degrees) {
         this.playScreen = playScreen;
         world = playScreen.getWorld();
@@ -46,7 +46,7 @@ public class Projectile extends Sprite {
         this.mercenaryBody = mercenaryBody;
 
         this.item = item;
-        
+
         killProjectile = false;
         deadProjectile = false;
         hitEnvironment = false;
@@ -56,7 +56,7 @@ public class Projectile extends Sprite {
         previousAngle = 0;
         int arrowSpeed = 40;
 
-        projDirRight =  (degrees < 180) ? true : false;
+        projDirRight = (degrees < 180) ? true : false;
 
         setBounds(mercenaryBody.getPosition().x, mercenaryBody.getPosition().y, 30 / FightGame.PPM, 6 / FightGame.PPM);
         setOrigin(projDirRight ? getWidth() : 0, getHeight() / 2);
@@ -72,15 +72,14 @@ public class Projectile extends Sprite {
         if (killProjectile && !deadProjectile) {
             world.destroyBody(arrowBody);
             deadProjectile = true;
-        } else if(deadProjectile && hitEnvironment && deathTimer < 1){
+        } else if (deadProjectile && hitEnvironment && deathTimer < 1) {
             deathTimer += dt;
             setAlpha(1.0f - (deathTimer));
-        }
-        else if (!deadProjectile) {
+        } else if (!deadProjectile) {
             float angle = (float) (MathUtils.radiansToDegrees * Math.tan(arrowBody.getLinearVelocity().y / arrowBody.getLinearVelocity().x));
             rotate(angle - previousAngle);
 
-            setPosition(arrowBody.getPosition().x + (projDirRight ? - getWidth() : 0), arrowBody.getPosition().y - getHeight() / 2);
+            setPosition(arrowBody.getPosition().x + (projDirRight ? -getWidth() : 0), arrowBody.getPosition().y - getHeight() / 2);
             previousAngle = angle;
         }
     }
@@ -88,7 +87,7 @@ public class Projectile extends Sprite {
     public void defineProj() {
 
         BodyDef bodyDef = new BodyDef();
-        bodyDef.position.set(projDirRight ? mercenaryBody.getPosition().x + 20/ FightGame.PPM : mercenaryBody.getPosition().x - 20/ FightGame.PPM, mercenaryBody.getPosition().y + 30/FightGame.PPM);
+        bodyDef.position.set(projDirRight ? mercenaryBody.getPosition().x + 20 / FightGame.PPM : mercenaryBody.getPosition().x - 20 / FightGame.PPM, mercenaryBody.getPosition().y + 30 / FightGame.PPM);
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         arrowBody = world.createBody(bodyDef);
         arrowBody.setBullet(true);
@@ -127,7 +126,7 @@ public class Projectile extends Sprite {
         return mercenary;
     }
 
-    public Item getItem(){
+    public Item getItem() {
         return item;
     }
 }

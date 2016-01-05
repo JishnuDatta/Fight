@@ -33,16 +33,16 @@ public abstract class Mercenary {
         return loadout;
     }
 
-    public Stats getStats(){
+    public Stats getStats() {
         return stats;
     }
 
     //Just a placeholder for when I create real sprites, convert this to abstract afterwards
-    public TextureRegion getTextureRegion(TextureAtlas atlas){
+    public TextureRegion getTextureRegion(TextureAtlas atlas) {
         return new TextureRegion(atlas.findRegion("Human"), 0, 0, 32, 72);
     }
 
-    public Damage getBaseDamage(){
+    public Damage getBaseDamage() {
         return new Damage(getRangedDamage(), getMagicDamage(), getShadowDamage(), getPhysicalDamage(), getTechDamage());
     }
 

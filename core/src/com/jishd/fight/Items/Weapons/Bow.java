@@ -11,7 +11,7 @@ public class Bow extends Item {
         super(level, rangedAttributes, magicAttributes, shadowAttributes, physicalAttributes, techAttributes, damageType, effect);
     }
 
-    public FightGame.ItemType getItemType(){
+    public FightGame.ItemType getItemType() {
         return FightGame.ItemType.WEAPON;
     }
 
@@ -25,10 +25,9 @@ public class Bow extends Item {
         return super.getCombinedName() + "Bow";
     }
 
-    public FightGame.Weapons getWeaponType(){
+    public FightGame.Weapons getWeaponType() {
         return FightGame.Weapons.Bow;
     }
-
 
 
 }

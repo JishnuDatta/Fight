@@ -72,8 +72,8 @@ public abstract class Item {
         }
     }
 
-        //Get Diversity description
-private void getDiversityDescription(){
+    //Get Diversity description
+    private void getDiversityDescription() {
         if (diversity == 5) {
             diversityDescription = "Master's";
         } else if (diversity == 4) {
@@ -147,19 +147,18 @@ private void getDiversityDescription(){
 
     public abstract FightGame.DamageForms getItemAffinity();
 
-    public int getLevel(){
+    public int getLevel() {
         return level;
     }
 
-    public Damage getDamage(){
-        Damage damageToBeReturned = new Damage(0,0,0,0,0);
-        switch(damageType){
+    public Damage getDamage() {
+        Damage damageToBeReturned = new Damage(0, 0, 0, 0, 0);
+        switch (damageType) {
             case Boring: // 30 Affinity Damage + 100% * Mercenary Affinity Attributes
-                if(getItemAffinity() == FightGame.DamageForms.Ranged){
+                if (getItemAffinity() == FightGame.DamageForms.Ranged) {
                     float damageBoring = 30 + rangedAttributes;
                     damageToBeReturned.rangedDamage += damageBoring;
-                }
-                else if(getItemAffinity() == FightGame.DamageForms.Shadow){
+                } else if (getItemAffinity() == FightGame.DamageForms.Shadow) {
                     float damageBoring = 30 + shadowAttributes;
                     damageToBeReturned.shadowDamage += damageBoring;
                 }

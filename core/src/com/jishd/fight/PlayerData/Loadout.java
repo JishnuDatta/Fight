@@ -37,29 +37,29 @@ public class Loadout {
     }
 
     public void equip(Item item, FightGame.SLOT slot) {
-        if(mercenary.getPlayer().getInventory().getAllItems().contains(item)){
+        if (mercenary.getPlayer().getInventory().getAllItems().contains(item)) {
             //Turn into switch statement? useful for doubles etc
-        if (slot == FightGame.SLOT.weapon1Slot) {
-            weapon1 = item;
-        } else if (slot == FightGame.SLOT.weapon2Slot) {
-            weapon2 = item;
-        } else if (slot == FightGame.SLOT.misc1Slot) {
-            misc1 = item;
-        } else if (slot == FightGame.SLOT.misc2Slot) {
-            misc2 = item;
-        } else if (slot == FightGame.SLOT.misc3Slot) {
-            misc3 = item;
-        } else if (slot == FightGame.SLOT.misc4Slot) {
-            misc4 = item;
-        } else if (slot == FightGame.SLOT.headSlot) {
-            head = item;
-        } else if (slot == FightGame.SLOT.chestSlot) {
-            chest = item;
-        } else if (slot == FightGame.SLOT.legSlot) {
-            leg = item;
-        } else if (slot == FightGame.SLOT.footSlot) {
-            foot = item;
-        }
+            if (slot == FightGame.SLOT.weapon1Slot) {
+                weapon1 = item;
+            } else if (slot == FightGame.SLOT.weapon2Slot) {
+                weapon2 = item;
+            } else if (slot == FightGame.SLOT.misc1Slot) {
+                misc1 = item;
+            } else if (slot == FightGame.SLOT.misc2Slot) {
+                misc2 = item;
+            } else if (slot == FightGame.SLOT.misc3Slot) {
+                misc3 = item;
+            } else if (slot == FightGame.SLOT.misc4Slot) {
+                misc4 = item;
+            } else if (slot == FightGame.SLOT.headSlot) {
+                head = item;
+            } else if (slot == FightGame.SLOT.chestSlot) {
+                chest = item;
+            } else if (slot == FightGame.SLOT.legSlot) {
+                leg = item;
+            } else if (slot == FightGame.SLOT.footSlot) {
+                foot = item;
+            }
         }
     }
 

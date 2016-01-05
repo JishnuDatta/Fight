@@ -47,7 +47,7 @@ public class Stats {
 
         switch (mercenary.getType()) {
             case RANGER:
-               // maxRanged *= 2;
+                // maxRanged *= 2;
                 passive = "knockback";
                 break;
             case WIZARD:

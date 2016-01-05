@@ -10,7 +10,7 @@ public class Dagger extends Item {
 
     @Override
     public FightGame.ItemType getItemType() {
-         return FightGame.ItemType.WEAPON;
+        return FightGame.ItemType.WEAPON;
     }
 
     @Override
@@ -23,7 +23,7 @@ public class Dagger extends Item {
         return super.getCombinedName() + "Dagger";
     }
 
-    public FightGame.Weapons getWeaponType(){
+    public FightGame.Weapons getWeaponType() {
         return FightGame.Weapons.Dagger;
     }
 }
