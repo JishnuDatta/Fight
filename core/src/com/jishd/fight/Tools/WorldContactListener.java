@@ -37,13 +37,14 @@ public class WorldContactListener implements ContactListener {
                 break;
             case FightGame.PROJECTILE_BIT | FightGame.TILE_BIT:
                 if (fixA.getFilterData().categoryBits == FightGame.PROJECTILE_BIT) {
-                    ((Projectile) (fixA.getUserData())).destroy(true);
+                    ((Projectile) (fixA.getUserData())).setDeleteEntity();
                 } else {
-                    ((Projectile) (fixB.getUserData())).destroy(true);
+                    ((Projectile) (fixB.getUserData())).setDeleteEntity();
                 }
                 break;
             case FightGame.HEAD_BIT | FightGame.TILE_BIT:
             case FightGame.BODY_BIT | FightGame.TILE_BIT:
+            case FightGame.PROJECTILE_BIT | FightGame.PROJECTILE_BIT:
             default:
                 break;
 

@@ -95,10 +95,10 @@ public class FightGame extends Game {
         playerList.get(2).buyMercenary(Mercenaries.RANGER);
         playerList.get(3).buyMercenary(Mercenaries.RANGER);
         //Hardcoding control values, also find out why printscreen is causing other players to act
-        playerList.get(0).controls[0] = Input.Keys.UP;
-        playerList.get(0).controls[1] = Input.Keys.LEFT;
-        playerList.get(0).controls[2] = Input.Keys.RIGHT;
-        playerList.get(0).controls[3] = Input.Keys.DOWN;
+        playerList.get(0).controls[0] = Input.Keys.W;
+        playerList.get(0).controls[1] = Input.Keys.A;
+        playerList.get(0).controls[2] = Input.Keys.D;
+        playerList.get(0).controls[3] = Input.Keys.S;
         playerList.get(0).controls[4] = Input.Keys.SPACE;
 
         for (int i = 1; i < 4; i++) {

@@ -2,6 +2,7 @@ package com.jishd.fight.Sprites;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 import com.jishd.fight.FightGame;
@@ -16,27 +17,26 @@ public abstract class Entity extends Sprite {
     protected TextureRegion completeEntityRegion;
     protected TextureRegion currentRegion;
 
-
-    public Entity(PlayScreen playScreen, int positionX, int positionY, TextureRegion textureRegion) {
+//Used for creating player entities
+    public Entity(PlayScreen playScreen, float spawnPointX, float spawnPointY, TextureRegion textureRegion) {
         this.playScreen = playScreen;
         this.world = playScreen.getWorld();
         this.completeEntityRegion = textureRegion;
         deleteEntity = false;
         currentRegion = getTextureRegion(textureRegion);
         setRegion(currentRegion);
-        createEntityBody(positionX, positionY);
+        createEntityBody(spawnPointX, spawnPointY);
         setSize(currentRegion.getRegionWidth() / FightGame.PPM, currentRegion.getRegionHeight() / FightGame.PPM);
-        addEntity(playScreen);
+        addEntity();
     }
 
-    public abstract void createEntityBody(int positionX, int positionY);
+    public abstract void createEntityBody(float spawnPointX, float spawnPointY);
 
-    public void update(float dt) {
-    }
+    public abstract void update(float dt);
 
     public abstract TextureRegion getTextureRegion(TextureRegion textureRegion);
 
-    public void addEntity(PlayScreen playScreen) {
+    public void addEntity() {
         playScreen.getEntities().add(this);
     }
 
@@ -50,5 +50,9 @@ public abstract class Entity extends Sprite {
 
     protected TextureRegion getRegion() {
         return currentRegion;
+    }
+
+    public Vector2 degreesToCoordinates(float degrees){
+        return new Vector2(0,0);
     }
 }
