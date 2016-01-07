@@ -19,10 +19,10 @@ public class FightGame extends Game {
     public static final short NOTHING_BIT = 0;
     public static final short HEAD_BIT = 1;
     public static final short BODY_BIT = 2;
-    public static final short PROJECTILE_BIT = 4;
-    public static final short TILE_BIT = 8;
-    //public static final short DESTROYED_BIT = 16;
-    //public static final short OBJECT_BIT = 32;
+    public static final short LEG_BIT = 4;
+    public static final short JUMP_BIT = 8;
+    public static final short PROJECTILE_BIT = 16;
+    public static final short TILE_BIT = 32;
     //public static final short ENEMY_BIT = 64;
     //public static final short ENEMY_HEAD_BIT = 128;
     //public static final short ITEM_BIT = 256;

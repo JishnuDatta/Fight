@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.EdgeShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.utils.Array;
@@ -27,6 +28,7 @@ public class MercenaryModel extends Entity {
     private float currentHealth, currentMana;
 
     private boolean charDirRight;
+    private int maxJumps;
     private int jumpCounter;
 
     private float deathTimer;
@@ -53,12 +55,14 @@ public class MercenaryModel extends Entity {
         currentMana = mercenary.getManaMult();
 
         charDirRight = true;
+        maxJumps = mercenary.getMaxJumps();
         jumpCounter = 0;
 
         deathTimer = 0;
 
         healthAndManaBarCreator = new HealthAndManaBarCreator(this);
         damageOnHitGeneratorArray = new Array<DamageOnHitGenerator>();
+        setAlpha(0f);
     }
 
     public void createEntityBody(float spawnPointX, float spawnPointY) {
@@ -90,9 +94,17 @@ public class MercenaryModel extends Entity {
         PolygonShape legs = new PolygonShape();
         legs.setAsBox(11 / FightGame.PPM, 14 / FightGame.PPM, new Vector2(0 / FightGame.PPM, 0 / FightGame.PPM), 0);
         legFixture.shape = legs;
-        //this should be changed
-        legFixture.filter.categoryBits = FightGame.BODY_BIT;
+        legFixture.filter.categoryBits = FightGame.LEG_BIT;
         entityBody.createFixture(legFixture).setUserData(this);
+
+        //Create a sensor to see when the object is grounded.
+        FixtureDef jumpSensor = new FixtureDef();
+        EdgeShape jump = new EdgeShape();
+        jump.set(new Vector2(-7f / FightGame.PPM, -15 / FightGame.PPM), new Vector2(7f / FightGame.PPM, -15 / FightGame.PPM));
+        jumpSensor.shape = jump;
+        jumpSensor.filter.categoryBits = FightGame.JUMP_BIT;
+        jumpSensor.isSensor = true;
+        entityBody.createFixture(jumpSensor).setUserData(this);
     }
 
     public void update(float dt) {
@@ -145,8 +157,9 @@ public class MercenaryModel extends Entity {
 
     public void handleInput() {
         //Jump
-        if (Gdx.input.isKeyJustPressed(mercenary.getPlayer().controls[0])) {
+        if (Gdx.input.isKeyJustPressed(mercenary.getPlayer().controls[0]) && jumpCounter < maxJumps){
             entityBody.applyLinearImpulse(new Vector2(0, 8f), entityBody.getWorldCenter(), true);
+            jumpCounter++;
         }
         //Left
         if (Gdx.input.isKeyPressed(mercenary.getPlayer().controls[1]) && entityBody.getLinearVelocity().x >= -5) {
@@ -162,8 +175,6 @@ public class MercenaryModel extends Entity {
         if (Gdx.input.isKeyJustPressed(mercenary.getPlayer().controls[4])) {
             if (mercenary.getLoadout().getWeapon1().getWeaponType() == FightGame.Weapons.Bow) {
                 float degrees = getDegrees(Gdx.input.getX(),Math.abs(720 - Gdx.input.getY()));
-
-                System.out.println(degrees);
                 Vector2 projectileAdditionPosition = degreesConversion(degrees);
                 new Projectile(playScreen,( getEntityBody().getPosition().x + projectileAdditionPosition.x), (getEntityBody().getPosition().y + projectileAdditionPosition.y + 19 /FightGame.PPM),((Bow)mercenary.getLoadout().getWeapon1()).getProjectileTextureRegion(playScreen.getAtlas()),mercenary,mercenary.getLoadout().getWeapon1(), degrees);
 //            } else if (mercenary.getLoadout().getWeapon1().getWeaponType() == FightGame.Weapons.Dagger) {
@@ -214,14 +225,16 @@ public class MercenaryModel extends Entity {
         //(38 / FightGame.PPM) is the tested hypotenuse value
         float xValue = (float) (Math.cos(Math.toRadians(degrees)) * (38 / FightGame.PPM)) ;
         float yValue = (float) (Math.sin(Math.toRadians(degrees)) * (38 / FightGame.PPM)) ;
-        Vector2 v2 = new Vector2(  xValue,yValue);
-        System.out.println(v2.toString());
-        return v2;
+        return new Vector2(  xValue,yValue);
     }
 
     public float getDegrees(float x, float y){
         float bodyX = getEntityBody().getPosition().x;
         float bodyY =  getEntityBody().getPosition().y + (19 / FightGame.PPM);
         return new Vector2(x/ FightGame.PPM - bodyX,  y/ FightGame.PPM - bodyY).angle();
+    }
+
+    public void resetJumps(){
+        jumpCounter = 0;
     }
 }

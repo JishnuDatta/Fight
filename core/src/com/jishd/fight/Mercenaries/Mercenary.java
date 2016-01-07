@@ -13,11 +13,13 @@ public abstract class Mercenary {
     protected Player player;
     protected Stats stats;
     protected Loadout loadout;
+    protected int maxJumps;
 
     public Mercenary(Player player) {
         this.player = player;
         this.stats = new Stats(this);
         this.loadout = new Loadout(this);
+        maxJumps = 2;
         addAndEquipStarterItems();
     }
 
@@ -44,6 +46,10 @@ public abstract class Mercenary {
 
     public Damage getBaseDamage() {
         return new Damage(getRangedDamage(), getMagicDamage(), getShadowDamage(), getPhysicalDamage(), getTechDamage());
+    }
+
+    public int getMaxJumps(){
+        return maxJumps;
     }
 
     public float getRangedDamage() {

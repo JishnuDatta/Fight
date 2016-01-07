@@ -35,6 +35,13 @@ public class WorldContactListener implements ContactListener {
                     ((MercenaryModel) fixB.getUserData()).calculateDamage(((Projectile) fixA.getUserData()).getMercenary(), ((Projectile) fixA.getUserData()), "body");
                 }
                 break;
+            case FightGame.LEG_BIT | FightGame.PROJECTILE_BIT:
+                if (fixA.getFilterData().categoryBits == FightGame.LEG_BIT) {
+                    ((MercenaryModel) fixA.getUserData()).calculateDamage(((Projectile) fixB.getUserData()).getMercenary(), ((Projectile) fixB.getUserData()), "leg");
+                } else {
+                    ((MercenaryModel) fixB.getUserData()).calculateDamage(((Projectile) fixA.getUserData()).getMercenary(), ((Projectile) fixA.getUserData()), "leg");
+                }
+                break;
             case FightGame.PROJECTILE_BIT | FightGame.TILE_BIT:
                 if (fixA.getFilterData().categoryBits == FightGame.PROJECTILE_BIT) {
                     ((Projectile) (fixA.getUserData())).setDeleteEntity();
@@ -42,8 +49,22 @@ public class WorldContactListener implements ContactListener {
                     ((Projectile) (fixB.getUserData())).setDeleteEntity();
                 }
                 break;
-            case FightGame.HEAD_BIT | FightGame.TILE_BIT:
-            case FightGame.BODY_BIT | FightGame.TILE_BIT:
+            case FightGame.JUMP_BIT | FightGame.TILE_BIT:
+                if (fixA.getFilterData().categoryBits == FightGame.JUMP_BIT) {
+                    ((MercenaryModel) (fixA.getUserData())).resetJumps();
+
+                } else {
+                    ((MercenaryModel) (fixB.getUserData())).resetJumps();
+                }
+                break;
+            case FightGame.JUMP_BIT | FightGame.HEAD_BIT:
+                if (fixA.getFilterData().categoryBits == FightGame.JUMP_BIT) {
+                    ((MercenaryModel) (fixA.getUserData())).resetJumps();
+
+                } else {
+                    ((MercenaryModel) (fixB.getUserData())).resetJumps();
+                }
+                break;
             case FightGame.PROJECTILE_BIT | FightGame.PROJECTILE_BIT:
             default:
                 break;
