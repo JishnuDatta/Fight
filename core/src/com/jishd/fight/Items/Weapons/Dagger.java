@@ -1,5 +1,7 @@
 package com.jishd.fight.Items.Weapons;
 
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.jishd.fight.FightGame;
 import com.jishd.fight.Items.Item;
 
@@ -25,5 +27,9 @@ public class Dagger extends Item {
 
     public FightGame.Weapons getWeaponType() {
         return FightGame.Weapons.Dagger;
+    }
+
+    public TextureRegion getProjectileTextureRegion(TextureAtlas atlas){
+        return new TextureRegion(atlas.findRegion("Dagger"), 0,0,40,10);
     }
 }

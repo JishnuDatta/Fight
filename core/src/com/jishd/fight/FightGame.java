@@ -77,7 +77,7 @@ public class FightGame extends Game {
         NONE
     }
 
-    public enum Stages {STAGE1}
+    public enum Stages {STAGE1, STAGE2}
 
     //Appears to be the main function of the class
     @Override
@@ -112,7 +112,7 @@ public class FightGame extends Game {
         //Creates the sprite batch and the screen and sets the current screen to the PlayScreen
         batch = new SpriteBatch();
         //This will be replaced by menuscreen gui
-        currentScreen = new PlayScreen(this, Stages.STAGE1);
+        currentScreen = new PlayScreen(this, Stages.STAGE2);
         setScreen(currentScreen);
     }
 

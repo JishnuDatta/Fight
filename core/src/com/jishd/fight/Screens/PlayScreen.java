@@ -68,6 +68,9 @@ public class PlayScreen implements Screen {
             case STAGE1:
                 map = mapLoader.load("Stage1.tmx");
                 break;
+            case STAGE2:
+            map = mapLoader.load("Stage2.tmx");
+            break;
             default:
                 break;
         }

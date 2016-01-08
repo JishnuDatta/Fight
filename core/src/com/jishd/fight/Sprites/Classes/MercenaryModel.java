@@ -13,9 +13,11 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.utils.Array;
 import com.jishd.fight.FightGame;
 import com.jishd.fight.Items.Weapons.Bow;
+import com.jishd.fight.Items.Weapons.Dagger;
 import com.jishd.fight.Mercenaries.Mercenary;
 import com.jishd.fight.Screens.PlayScreen;
 import com.jishd.fight.Sprites.Entity;
+import com.jishd.fight.Sprites.Items.DaggerAttack;
 import com.jishd.fight.Sprites.Items.Projectile;
 import com.jishd.fight.Tools.Damage;
 import com.jishd.fight.Tools.DamageOnHitGenerator;
@@ -62,7 +64,6 @@ public class MercenaryModel extends Entity {
 
         healthAndManaBarCreator = new HealthAndManaBarCreator(this);
         damageOnHitGeneratorArray = new Array<DamageOnHitGenerator>();
-        setAlpha(0f);
     }
 
     public void createEntityBody(float spawnPointX, float spawnPointY) {
@@ -176,9 +177,9 @@ public class MercenaryModel extends Entity {
             if (mercenary.getLoadout().getWeapon1().getWeaponType() == FightGame.Weapons.Bow) {
                 float degrees = getDegrees(Gdx.input.getX(),Math.abs(720 - Gdx.input.getY()));
                 Vector2 projectileAdditionPosition = degreesConversion(degrees);
-                new Projectile(playScreen,( getEntityBody().getPosition().x + projectileAdditionPosition.x), (getEntityBody().getPosition().y + projectileAdditionPosition.y + 19 /FightGame.PPM),((Bow)mercenary.getLoadout().getWeapon1()).getProjectileTextureRegion(playScreen.getAtlas()),mercenary,mercenary.getLoadout().getWeapon1(), degrees);
-//            } else if (mercenary.getLoadout().getWeapon1().getWeaponType() == FightGame.Weapons.Dagger) {
-//                DaggerAttack daggerAttack = new DaggerAttack(playScreen, super.entityBody, mercenary, mercenary.getLoadout().getWeapon1(), charDirRight ? 0 : 180);
+                new Projectile(playScreen,( entityBody.getPosition().x + projectileAdditionPosition.x), (entityBody .getPosition().y + projectileAdditionPosition.y + 19 /FightGame.PPM),((Bow)mercenary.getLoadout().getWeapon1()).getProjectileTextureRegion(playScreen.getAtlas()),mercenary,mercenary.getLoadout().getWeapon1(), degrees);
+            } else if (mercenary.getLoadout().getWeapon1().getWeaponType() == FightGame.Weapons.Dagger) {
+                new DaggerAttack(playScreen,  entityBody.getWorldCenter().x + (charDirRight? 24/FightGame.PPM: -24/FightGame.PPM), entityBody .getPosition().y + 10 /FightGame.PPM,((Dagger)mercenary.getLoadout().getWeapon1()).getProjectileTextureRegion(playScreen.getAtlas()), entityBody, mercenary.getLoadout().getWeapon1());
             }
         }
 

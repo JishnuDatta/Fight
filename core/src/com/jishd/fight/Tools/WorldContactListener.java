@@ -22,23 +22,23 @@ public class WorldContactListener implements ContactListener {
         switch (cDef) {
             //For collision between bullet and a head
             case FightGame.HEAD_BIT | FightGame.PROJECTILE_BIT:
-                if (fixA.getFilterData().categoryBits == FightGame.HEAD_BIT) {
+                if (fixA.getFilterData().categoryBits == FightGame.HEAD_BIT && !((Projectile) fixB.getUserData()).deleteEntity) {
                     ((MercenaryModel) fixA.getUserData()).calculateDamage(((Projectile) fixB.getUserData()).getMercenary(), ((Projectile) fixB.getUserData()), "head");
-                } else {
+                } else if (fixB.getFilterData().categoryBits == FightGame.HEAD_BIT && !((Projectile) fixA.getUserData()).deleteEntity) {
                     ((MercenaryModel) fixB.getUserData()).calculateDamage(((Projectile) fixA.getUserData()).getMercenary(), ((Projectile) fixA.getUserData()), "head");
                 }
                 break;
             case FightGame.BODY_BIT | FightGame.PROJECTILE_BIT:
-                if (fixA.getFilterData().categoryBits == FightGame.BODY_BIT) {
+                if (fixA.getFilterData().categoryBits == FightGame.BODY_BIT && !((Projectile) fixB.getUserData()).deleteEntity) {
                     ((MercenaryModel) fixA.getUserData()).calculateDamage(((Projectile) fixB.getUserData()).getMercenary(), ((Projectile) fixB.getUserData()), "body");
-                } else {
+                } else if(fixB.getFilterData().categoryBits == FightGame.BODY_BIT && !((Projectile) fixA.getUserData()).deleteEntity){
                     ((MercenaryModel) fixB.getUserData()).calculateDamage(((Projectile) fixA.getUserData()).getMercenary(), ((Projectile) fixA.getUserData()), "body");
                 }
                 break;
             case FightGame.LEG_BIT | FightGame.PROJECTILE_BIT:
-                if (fixA.getFilterData().categoryBits == FightGame.LEG_BIT) {
+                if (fixA.getFilterData().categoryBits == FightGame.LEG_BIT && !((Projectile) fixB.getUserData()).deleteEntity) {
                     ((MercenaryModel) fixA.getUserData()).calculateDamage(((Projectile) fixB.getUserData()).getMercenary(), ((Projectile) fixB.getUserData()), "leg");
-                } else {
+                } else if (fixB.getFilterData().categoryBits == FightGame.LEG_BIT && !((Projectile) fixA.getUserData()).deleteEntity){
                     ((MercenaryModel) fixB.getUserData()).calculateDamage(((Projectile) fixA.getUserData()).getMercenary(), ((Projectile) fixA.getUserData()), "leg");
                 }
                 break;
